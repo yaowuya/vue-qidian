@@ -1,0 +1,17 @@
+{
+  "presets": [
+    "env","stage-2"
+  ],
+  "plugins": [
+    [
+      "transform-runtime",
+      {
+        "helpers": true,
+        "polyfill": true,
+        "regenerator": true,
+        "moduleName": "babel-runtime"
+      }
+    ],
+    "dynamic-import-node"
+  ]
+}
