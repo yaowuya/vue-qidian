@@ -12,6 +12,7 @@
         "moduleName": "babel-runtime"
       }
     ],
-    "dynamic-import-node"
+    "dynamic-import-node",
+    "transform-vue-jsx"
   ]
 }
