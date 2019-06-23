@@ -1,18 +1,29 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="home unlogin-page">
+    <Header :items="itemsData"></Header>
+    <div class="pa w-100 h-100 d-flex jc-center ai-center">
+      <van-icon class="fs-18 mr-1 text-lowgrey" class-prefix="my-icon" name="searchicon"/>
+    </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
+import Header from "../components/Header"
 export default {
   name: 'home',
   components: {
-    HelloWorld
+    Header
+  },
+  data(){
+    return{
+      itemsData:["我的书架","最近阅读"]
+    }
   }
 }
 </script>
+
+<style scoped lang="scss">
+  .pa{
+    position: absolute;
+  }
+</style>

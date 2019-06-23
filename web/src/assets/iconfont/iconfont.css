@@ -1,0 +1,32 @@
+@font-face {
+  font-family: 'my-icon';
+  src: url('./iconfont.ttf') format('truetype');
+}
+
+.my-icon {
+  font-family: 'my-icon' !important;
+  position: relative;
+  font: 0.37333rem/1 "my-icon";
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+.my-icon-custom-search:before {
+  content: "\e625";
+}
+
+.my-icon-searchicon:before {
+  content: "\e615";
+}
+
+.my-icon-ico-left-arrow:before {
+  content: "\e66f";
+}
+
+.my-icon-zhang:before {
+  content: "\e64e";
+}
+

@@ -1,0 +1,54 @@
+//colors
+$colors: (
+        "lowgrey":rgb(150, 155, 163),
+        "lowblack":rgb(51, 55, 61),
+        "blue":rgb(66, 132, 237),
+        "red":rgb(237, 66, 75),
+        "white":rgb(255, 255, 255),
+);
+
+// font size
+$base-font-size: 1px;
+$font-sizes: (
+        "13":13,
+        "14":14 ,
+        "15":15,
+        "18":18,
+);
+
+// spacing
+// 0-5: 0
+// .mt-1  => margin top  .pb-2
+$spacing-types: (
+        m: margin,
+        p: padding,
+);
+$spacing-directions: (
+        t: top,
+        r: right,
+        b: bottom,
+        l: left,
+);
+$spacing-base-size: 1px;
+$spacing-sizes: (
+        0: 0,
+        1: 5,
+        2: 10,
+        3: 15,
+        4: 20,
+        5: 25,
+);
+
+$flex-jc: (
+        start: flex-start,
+        end: flex-end,
+        center: center,
+        between: space-between,
+        around: space-around,
+);
+$flex-ai: (
+        start: flex-start,
+        end: flex-end,
+        center: center,
+        stretch: stretch,
+);

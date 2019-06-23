@@ -1,0 +1,121 @@
+@import "~normalize.css/normalize.css";
+@import "../iconfont/iconfont.css";
+@import "variable";
+//reset
+* {
+  box-sizing: border-box;
+  outline: none;
+}
+//html {
+//  font-size: 16px
+//}
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #33373d;
+  background: #fefefe;
+  -webkit-font-smoothing: antialiased;
+}
+
+//colors
+@each $colorKey, $color in $colors {
+  .text-#{$colorKey} {
+    color: $color;
+  }
+  .bg-#{$colorKey} {
+    background-color: $color;
+  }
+}
+
+// text align
+@each $var in (left, center, right) {
+  .text-#{$var} {
+    text-align: $var !important;
+  }
+}
+
+//font-size fs-
+@each $key, $val in $font-sizes {
+  .fs-#{$key} {
+    font-size: $base-font-size*$val;
+  }
+}
+
+// m-0, mx-0
+@each $typeKey, $type in $spacing-types {
+  // .m-1
+  @each $sizeKey, $size in $spacing-sizes {
+    .#{$typeKey}-#{$sizeKey} {
+      #{$type}: $size * $spacing-base-size;
+    }
+  }
+  // .mx-1 , .my-1
+  @each $sizeKey, $size in $spacing-sizes {
+    .#{$typeKey}x-#{$sizeKey} {
+      #{$type}-left: $size * $spacing-base-size;
+      #{$type}-right: $size * $spacing-base-size;
+    }
+    .#{$typeKey}y-#{$sizeKey} {
+      #{$type}-top: $size * $spacing-base-size;
+      #{$type}-bottom: $size * $spacing-base-size;
+    }
+  }
+  // .mt-1
+  @each $directionKey, $direction in $spacing-directions {
+    @each $sizeKey, $size in $spacing-sizes {
+      .#{$typeKey}#{$directionKey}-#{$sizeKey} {
+        #{$type}-#{$direction}: $size * $spacing-base-size;
+      }
+    }
+  }
+}
+
+.w-100{
+  width: 100%;
+}
+.h-100{
+  height: 100%;
+}
+
+// flex
+.d-flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.flex-grow-1 {
+  flex-grow: 1;
+}
+
+@each $key, $value in $flex-jc {
+  .jc-#{$key} {
+    justify-content: $value;
+  }
+}
+
+@each $key, $value in $flex-ai {
+  .ai-#{$key} {
+    align-items: $value;
+  }
+}
+
+
+.unlogin-page {
+  min-height: 500px;
+  min-height: calc(100vh - 8.75rem)
+}
+.login-page{
+  min-height: 556px;
+  min-height: calc(100vh - (84rem / 16))
+}

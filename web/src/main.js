@@ -3,9 +3,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+import './assets/styles/reset.scss' // A modern alternative to CSS resets
 import './rem'
-
-import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 
 import Vant from 'vant'
 import 'vant/lib/index.css'
