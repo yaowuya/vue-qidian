@@ -119,3 +119,49 @@ body {
   min-height: 556px;
   min-height: calc(100vh - (84rem / 16))
 }
+
+[data-size=''] {
+  display: block
+}
+[data-size='1'] {
+  width: 1.25rem
+}
+[data-size='2'] {
+  width: 2.5rem
+}
+[data-size='3'] {
+  width: 3.75rem
+}
+[data-size='4'] {
+  width: 5rem
+}
+[data-size='5'] {
+  width: 6.25rem
+}
+[data-size='6'] {
+  width: 7.5rem
+}
+[data-size='7'] {
+  width: 8.75rem
+}
+[data-size='8'] {
+  width: 10rem
+}
+[data-size='9'] {
+  width: 11.25rem
+}
+[data-size='10'] {
+  width: 12.5rem
+}
+[data-size='11'] {
+  width: 13.75rem
+}
+[data-size='12'] {
+  width: 15rem
+}
+[data-size='13'] {
+  width: 16.25rem
+}
+[data-size='14'] {
+  width: 17.5rem
+}
