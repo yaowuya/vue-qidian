@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Main from './views/Main.vue'
+import Shelf from './views/Shelf.vue'
 
 Vue.use(Router)
 
@@ -10,16 +10,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Main',
-      component: Main,
-      redirect: '/bookshelf',
-      children:[
-        {
-          path: '/bookshelf',
-          name: 'BookShelf',
-          component: () => import('./views/BookShelf')
-        }
-      ]
+      name: 'Shelf',
+      component: Shelf
     },
     {
       path: '/about',

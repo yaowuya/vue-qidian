@@ -1,28 +1,37 @@
 <template>
   <div class="header">
     <van-nav-bar :fixed="true" :z-index="100">
-      <van-icon class="fs-18 text-gray" class-prefix="my-icon" name="ico-left-arrow" slot="left"/>
+      <div slot="left">
+        <van-icon class="fs-18 text-gray" class-prefix="my-icon" name="ico-left-arrow"/>
+        <span class="header-title">{{this.headerTitle}}</span>
+      </div>
       <div slot="title" class="pt-2">
         <div class="nav jc-center">
-          <div class="nav-item" :class="{active:active===i}"
-               v-for="(item,i) in items"
+          <div class="nav-item"
+               v-for="(item,i) in this.headerItems"
+               :class="{ active: itemType === item.name }"
                :key="i"
-               @click="active=i"
+               @click="itemChange(item.name)"
           >
-            <div class="nav-link">{{item}}</div>
+            <div class="nav-link">{{item.text}}</div>
           </div>
         </div>
       </div>
       <div slot="right">
         <van-icon class="fs-18 mr-1 text-gray" class-prefix="my-icon" name="searchicon"/>
-        <van-icon class="fs-18 text-gray"
+        <van-icon v-if="isHomePage"  class="fs-18 text-red mt-1"
                   class-prefix="my-icon"
-                  name="zhang"
+                  name="shujia"
+                  @click="toShelf"
+        />
+        <van-icon v-else class="fs-18 text-gray"
+                  class-prefix="my-icon"
+                  :name="guide.icon"
                   @click="toggleGuide"
         />
       </div>
     </van-nav-bar>
-    <div class="guide" :class="{active:guideActive}">
+    <div class="guide" :class="{active:guide.active}">
       <i class="guide-overlay" role="button" title="点击收起" @click="toggleGuide"></i>
       <div class="guide-content">
         <nav class="guide-nav mt-2">
@@ -50,25 +59,56 @@
 </template>
 
 <script>
+  import {mapState} from 'vuex';
+  import {HOME_PAGE} from "../utils/storage"
+
   export default {
     name: 'Header',
     props: {
-      items: { type: Array, required: true }
-    },
-    data () {
-      return {
-        show: false,
-        active: 0,
-        guideActive: false,
-        tabarItem: 0
+      itemName: {
+        type: String,
+        default:"",
+        required: true
       }
     },
+    computed: {
+      ...mapState([
+        "headerTitle",
+        "headerType",
+        "headerItems"
+      ])
+    },
+    data() {
+      return {
+        guide: {
+          icon: "zhang",
+          active: false
+        },
+        tabarItem: 5,
+        isHomePage: false,
+        itemType:""
+      }
+    },
+    created() {
+      if (this.headerType === HOME_PAGE) {
+        this.isHomePage = true;
+      } else {
+        this.isHomePage = false;
+      }
+      this.itemType=this.itemName
+    },
     methods: {
-      showPopup () {
-        this.show = true
+      itemChange(item) {
+        this.itemType = item;
+        this.$emit('item-change', item);
       },
-      toggleGuide () {
-        this.guideActive = !this.guideActive
+      toggleGuide() {
+        this.tabarItem = 5;
+        this.guide.active = !this.guide.active;
+        this.guide.active ? this.guide.icon = "x" : this.guide.icon = "zhang";
+      },
+      toShelf() {
+
       }
     }
   }
@@ -78,7 +118,21 @@
   @import "../assets/styles/variable";
 
   .header {
+    position: relative;
     height: 2.75rem;
+  }
+
+  .header-title {
+    font-size: .875rem;
+    font-weight: 400;
+    line-height: 1.375rem;
+    position: absolute;
+    left: 1rem;
+    top: 0.6rem;
+    overflow: hidden;
+    /*max-width: 60%;*/
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   #popupid {
@@ -163,11 +217,13 @@
       opacity: 0;
       background-color: #000
     }
-    .guide-footer{
+
+    .guide-footer {
       margin-top: 1rem;
       margin-bottom: 1.5rem;
       text-align: center;
-      .btn{
+
+      .btn {
         border-radius: 99px;
       }
     }
