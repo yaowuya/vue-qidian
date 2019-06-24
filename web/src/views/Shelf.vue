@@ -1,7 +1,7 @@
 <template>
   <!--  我的书架-->
-  <div class="home unlogin-page">
-    <Header :item-name="itemName" :item-change="shelfChange"></Header>
+  <div class="shelf">
+    <Header :item-name="itemName" @item-change="shelfChange"></Header>
     <div class="pa w-100 h-100 d-flex jc-center ai-center">
       <van-icon class="icon-body fs-18 mr-1 text-gray" class-prefix="my-icon" name="read"/>
     </div>
@@ -25,8 +25,8 @@
     },
     created() {
       this.SET_HEADER_INFO({
-        title: '我的书架',
-        type: "HOMEPAGE",
+        title: '书架',
+        type: SHELF_PAGE,
         items:[
           {name:"myShelf",text:"我的书架"},
           {name:"recentRead",text:"最近阅读"},

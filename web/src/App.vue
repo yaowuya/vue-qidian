@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="unlogin-page">
     <router-view/>
   </div>
 </template>

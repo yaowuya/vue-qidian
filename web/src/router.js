@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Shelf from './views/Shelf.vue'
+import Shelf from './views/Shelf'
 
 Vue.use(Router)
 
@@ -12,6 +12,10 @@ export default new Router({
       path: '/',
       name: 'Shelf',
       component: Shelf
+    },{
+      path:"/home",
+      name:"home",
+      component:() => import(/* webpackChunkName: "about" */ './views/Home')
     },
     {
       path: '/about',

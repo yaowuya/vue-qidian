@@ -35,20 +35,7 @@
       <i class="guide-overlay" role="button" title="点击收起" @click="toggleGuide"></i>
       <div class="guide-content">
         <nav class="guide-nav mt-2">
-          <van-tabbar v-model="tabarItem" :fixed="false" :border="false">
-            <van-tabbar-item>
-              <van-icon slot="icon" class="fs-18 text-red" class-prefix="my-icon" name="shouye"/>
-              <span>首页</span>
-            </van-tabbar-item>
-            <van-tabbar-item>
-              <van-icon slot="icon" class="fs-18 text-blue" class-prefix="my-icon" name="fenlei"/>
-              <span>分类</span>
-            </van-tabbar-item>
-            <van-tabbar-item>
-              <van-icon slot="icon" class="fs-18 text-red" class-prefix="my-icon" name="paixing"/>
-              <span>排行</span>
-            </van-tabbar-item>
-          </van-tabbar>
+          <Navbar></Navbar>
         </nav>
         <div class="guide-footer">
           <van-button class="btn" data-size="14" type="danger" size="small">我的书架</van-button>
@@ -61,6 +48,7 @@
 <script>
   import {mapState} from 'vuex';
   import {HOME_PAGE} from "../utils/storage"
+  import Navbar from '../components/Navbar'
 
   export default {
     name: 'Header',
@@ -70,6 +58,9 @@
         default:"",
         required: true
       }
+    },
+    components:{
+      Navbar
     },
     computed: {
       ...mapState([
@@ -108,7 +99,7 @@
         this.guide.active ? this.guide.icon = "x" : this.guide.icon = "zhang";
       },
       toShelf() {
-
+         return this.$router.push({path:"/"})
       }
     }
   }
