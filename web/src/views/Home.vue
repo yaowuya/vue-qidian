@@ -51,6 +51,7 @@
   import {mapState, mapMutations} from 'vuex'
   import {SHELF_PAGE, HOME_PAGE} from '../utils/storage'
   import api from "../api/api"
+  import {loading} from "../utils/toast"
   import Header from '../components/Header'
   import Navbar from "../components/Navbar"
   import HomeList from "../components/HomeList"
@@ -78,6 +79,13 @@
         loadModules: []
       }
     },
+    watch: {
+      loadModules: function () {
+        if(this.loadModules.length === 0) {
+          loading.closeLoding();
+        }
+      }
+    },
     created() {
       this.SET_HEADER_INFO({
         title: '主页',
@@ -88,13 +96,14 @@
         ],
       });
       this.fetchData();
+      loading.showLoading();
     },
     methods: {
       ...mapMutations([
         'SET_HEADER_INFO'
       ]),
       itemChange(item) {
-        console.log(item);
+        loading.showLoading();
         document.body.scrollTop = 0;
         this.sex = item;
         this.fetchData();
@@ -115,13 +124,12 @@
             });
             this.modules = data;
             this.loadModules = Array.from(data, value => value._id);
-            console.log(this.modules, this.loadModules);
           });
       },
       loadResult(id) {
         this.loadModules.splice(this.loadModules.indexOf(id), 1);
       }
-    }
+    },
   }
 </script>
 
