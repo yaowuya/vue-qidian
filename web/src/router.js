@@ -18,12 +18,18 @@ export default new Router({
       component:() => import(/* webpackChunkName: "about" */ './views/Home')
     },
     {
-      path: '/about',
-      name: 'about',
+      path: '/bookList',
+      name: 'bookList',
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+      component: () => import(/* webpackChunkName: "about" */ './views/BookList')
     }
-  ]
+  ],
+  scrollBehavior(to, from, savedPosition) {
+    return {
+      x: 0,
+      y: 0
+    }
+  }
 })

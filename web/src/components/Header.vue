@@ -2,10 +2,10 @@
   <div class="header">
     <van-nav-bar :fixed="true" :z-index="100">
       <div slot="left">
-        <van-icon class="fs-18 text-gray" class-prefix="my-icon" name="ico-left-arrow"/>
+        <van-icon class="fs-18 text-gray" class-prefix="my-icon" name="ico-left-arrow" @click="goBack"/>
         <span class="header-title">{{this.headerTitle}}</span>
       </div>
-      <div slot="title" class="pt-2">
+      <div slot="title" class="pt-2" v-if="this.headerItems.length>0">
         <div class="nav jc-center">
           <div class="nav-item"
                v-for="(item,i) in this.headerItems"
@@ -89,6 +89,9 @@
       this.itemType=this.itemName
     },
     methods: {
+      goBack(){
+        return this.$router.go(-1)
+      },
       itemChange(item) {
         this.itemType = item;
         this.$emit('item-change', item);
@@ -114,11 +117,11 @@
   }
 
   .header-title {
-    font-size: .875rem;
+    font-size: 0.8rem;
     font-weight: 400;
     line-height: 1.375rem;
     position: absolute;
-    left: 1rem;
+    left: 1.3rem;
     top: 0.6rem;
     overflow: hidden;
     /*max-width: 60%;*/

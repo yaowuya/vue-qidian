@@ -12,3 +12,5 @@
 [追书神器api](https://github.com/amumu233/zhuishushenqi/wiki/API-%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3)
 
 >vue引用本地图片时，用require获取，:src="require()“
+
+>vue传输的值如果是boolean或number,则父组件传值方式是：v-bind:x=true
