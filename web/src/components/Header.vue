@@ -1,10 +1,11 @@
 <template>
   <div class="header">
-    <van-nav-bar :fixed="true" :z-index="100">
+    <van-nav-bar  :z-index="100">
       <div slot="left">
         <van-icon class="fs-18 text-gray" class-prefix="my-icon" name="ico-left-arrow" @click="goBack"/>
         <span class="header-title">{{this.headerTitle}}</span>
       </div>
+      <!--headerItems值如果为空，头部中间部分就为空-->
       <div slot="title" class="pt-2" v-if="this.headerItems.length>0">
         <div class="nav jc-center">
           <div class="nav-item"
@@ -110,7 +111,9 @@
 
 <style scoped lang="scss">
   @import "../assets/styles/variable";
-
+  .van-nav-bar{
+    background-color: rgba(255,255,255,0.2) !important;//透明
+  }
   .header {
     position: relative;
     height: 2.75rem;

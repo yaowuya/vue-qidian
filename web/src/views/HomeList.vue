@@ -3,7 +3,7 @@
 </template>
 
 <script>
-  import ListCard from "./ListCard"
+  import ListCard from "../components/ListCard"
   import api from '../api/api'
 
   export default {

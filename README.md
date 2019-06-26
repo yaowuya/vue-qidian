@@ -14,3 +14,6 @@
 >vue引用本地图片时，用require获取，:src="require()“
 
 >vue传输的值如果是boolean或number,则父组件传值方式是：v-bind:x=true
+
+>vue 在data(){}中赋值为null时，会报错：Cannot read property 'book' of null"
+解决办法是在根元素上做个判断 v-if="book !==null"

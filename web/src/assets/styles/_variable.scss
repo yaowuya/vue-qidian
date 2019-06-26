@@ -1,5 +1,6 @@
 //colors
 $colors: (
+        "lowerdark":#ebebeb,
         "lowergrey":#f6f7f9,
         "dark":#33373d,
         "gray":#969ba3,
@@ -13,10 +14,10 @@ $colors: (
 );
 
 // font size
-$base-font-size: 1px;
+$base-font-size: 0.0625rem  /* 1/16 */ ;
 $font-sizes: (
         "13":13,
-        "14":14 ,
+        "14":14,
         "15":15,
         "18":18,
 );
@@ -34,7 +35,7 @@ $spacing-directions: (
         b: bottom,
         l: left,
 );
-$spacing-base-size: 1px;
+$spacing-base-size: 0.0625rem  /* 1/16 */ ;
 $spacing-sizes: (
         0: 0,
         1: 5,
@@ -42,6 +43,7 @@ $spacing-sizes: (
         3: 15,
         4: 20,
         5: 25,
+        6: 30
 );
 
 $flex-jc: (

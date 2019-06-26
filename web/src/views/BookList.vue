@@ -11,7 +11,7 @@
   import {BOOK_PAGE,debounce} from "../utils/storage"
   import api from "../api/api"
   import {loading} from "../utils/toast"
-  import {mapState,mapMutations} from "vuex"
+  import {mapMutations} from "vuex"
   import ListCard from '../components/ListCard'
 
   export default {
@@ -34,15 +34,8 @@
       }
     },
     computed:{
-      ...mapState([
-        'headerTitle',
-        'headerType'
-      ])
     },
     created() {
-      if (this.headerType === BOOK_PAGE) {
-        this.title = this.headerTitle;
-      }
       this.id = this.$route.params.id;
       this.title=this.$route.params.title;
       this.SET_HEADER_INFO({
@@ -65,27 +58,38 @@
         'SET_HEADER_INFO'
       ]),
       fetchData(){
-        api.getBookList(this.id, this.page)
-          .then(data => {
-            if (data==undefined||data.length === 0) {
-              this.isEnding=true;
-              return [];
-            }
-            data = data.map(value => {
-              return value.book;
-            });
-            return data;
-          })
-          .then(data => {
-            if (data.length < 10) {
-              this.isEnding = true;
-            }
-            console.log(data);
-            this.list.push(...data);
-            this.$nextTick(function() {
-              loading.closeLoding();
+        if (this.headerType === BOOK_PAGE) {
+          console.log('book', 1);
+          api.getRecommend(this.id)
+            .then(data => {
+              this.list = data;
+              this.$nextTick(function() {
+                this.isEnding = true;
+              })
             })
-          })
+        }else{
+          api.getBookList(this.id, this.page)
+            .then(data => {
+              if (data==undefined||data.length === 0) {
+                this.isEnding=true;
+                return [];
+              }
+              data = data.map(value => {
+                return value.book;
+              });
+              return data;
+            })
+            .then(data => {
+              if (data.length < 10) {
+                this.isEnding = true;
+              }
+              console.log(data);
+              this.list.push(...data);
+              this.$nextTick(function() {
+                loading.closeLoding();
+              })
+            })
+        }
       },
       loadMore() {
         //可滚动容器的高度

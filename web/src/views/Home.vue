@@ -1,6 +1,6 @@
 <template>
   <!--主页-->
-  <div class="home bg-lowergrey">
+  <div class="home">
     <Header :item-name="sex" @item-change="itemChange" ></Header>
     <div class="swipe-container">
       <van-swipe :autoplay="3000"
@@ -35,7 +35,7 @@
             <span class="module-title-desc">{{module.bookType}}</span>
           </div>
           <div class="module-header-r">
-            <router-link :to="{ name: 'bookList', params: {id : module._id,title:module.title} }" class="module-header-btn">
+            <router-link :to="{ name: 'BookList', params: {id : module._id,title:module.title} }" class="module-header-btn">
               更多
               <svg-icon class="text-lowergrey" icon-class="right-arrow"/>
             </router-link>
@@ -54,7 +54,7 @@
   import {loading} from "../utils/toast"
   import Header from '../components/Header'
   import Navbar from "../components/Navbar"
-  import HomeList from "../components/HomeList"
+  import HomeList from "./HomeList"
 
 
   export default {
@@ -133,7 +133,7 @@
   }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
   @import "../assets/styles/variable";
 
   .swipe-container {
@@ -147,73 +147,5 @@
   .van-swipe {
     height: 7rem;
     height: calc(.314 * (100vw - 1.5rem));
-  }
-
-  .module {
-    background-color: map_get($colors, "white");
-    margin: 0.75rem 0;
-
-    .module-header {
-      height: 1.75rem;
-      padding: 0 1rem;
-      border-top: 1rem solid transparent;
-
-      &::after { /*伪元素是行内元素 正常浏览器清除浮动方法*/
-        display: block;
-        clear: both;
-        height: 0;
-        content: '';
-        visibility: hidden;
-      }
-    }
-
-    .module-header-l {
-      float: left;
-    }
-
-    .module-header-r {
-      position: relative;
-      float: right;
-      min-width: 4rem;
-    }
-
-    .module-title {
-      font-family: FZZCYSK;
-      font-weight: 400;
-      display: inline;
-      color: #33373d;
-
-      &::before {
-        display: inline-block;
-        box-sizing: border-box;
-        width: 0.625rem;
-        height: 1rem;
-        content: '';
-        vertical-align: -.22ex;
-        color: transparent;
-        border-left: 2px solid #ed424b;
-      }
-    }
-
-    .module-title-desc {
-      font-size: 0.8125rem;
-      margin-left: 0.5rem;
-      color: #969ba3;
-    }
-
-    .module-header-btn {
-      font-size: .875rem;
-      line-height: 1.5rem;
-      position: absolute;
-      top: -.5rem;
-      right: -.75rem;
-      padding: .5rem .5rem .5rem .75rem;
-      white-space: nowrap;
-      color: #969ba3;
-
-      svg {
-        margin-left: .25rem;
-      }
-    }
   }
 </style>

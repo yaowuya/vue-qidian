@@ -97,6 +97,13 @@ em {
     text-align: $var !important;
   }
 }
+//float
+
+@each $var in (left,right){
+  .float-#{$var}{
+    float: $var;
+  }
+}
 
 //font-size fs-
 @each $key, $val in $font-sizes {

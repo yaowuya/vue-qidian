@@ -1,0 +1,138 @@
+@import "./variable";
+
+.module {
+  background-color: map_get($colors, "white");
+  margin: 0.75rem 0;
+
+  .module-header {
+    height: 1.75rem;
+    padding: 0 1rem;
+    border-top: 1rem solid transparent;
+
+    &::after { /*伪元素是行内元素 正常浏览器清除浮动方法*/
+      display: block;
+      clear: both;
+      height: 0;
+      content: '';
+      visibility: hidden;
+    }
+  }
+
+  .module-header-l {
+    float: left;
+  }
+
+  .module-header-r {
+    position: relative;
+    float: right;
+    min-width: 4rem;
+  }
+
+  .module-title {
+    font-family: FZZCYSK;
+    font-weight: 400;
+    display: inline;
+    color: #33373d;
+
+    &::before {
+      display: inline-block;
+      box-sizing: border-box;
+      width: 0.625rem;
+      height: 1rem;
+      content: '';
+      vertical-align: -.22ex;
+      color: transparent;
+      border-left: 2px solid #ed424b;
+    }
+  }
+
+  .module-title-desc {
+    font-size: 0.8125rem;
+    margin-left: 0.5rem;
+    color: #969ba3;
+  }
+
+  .module-header-btn {
+    font-size: .875rem;
+    line-height: 1.5rem;
+    position: absolute;
+    top: -.5rem;
+    right: -.75rem;
+    padding: .5rem .5rem .5rem .75rem;
+    white-space: nowrap;
+    color: #969ba3;
+
+    svg {
+      margin-left: .25rem;
+    }
+  }
+
+  p {
+    word-break: break-all;
+  }
+}
+
+.module-slide-ol {
+  position: relative;
+  display: none;
+  overflow-x: auto;
+  overflow-y: hidden;
+  min-height: 10.75rem;
+  padding-left: .5rem;
+  white-space: nowrap;
+}
+
+.module-slide-ol::-webkit-scrollbar {
+  display: none
+}
+
+.module-slide-ol:not(.WX) {
+  -webkit-overflow-scrolling: touch
+}
+
+.module-slide > .active,
+.module-slide-ol:only-child {
+  display: block
+}
+
+.module-slide-li {
+  display: inline-block;
+  vertical-align: top;
+  white-space: normal;
+  padding:0.5rem;
+}
+
+.module-slide-li:nth-of-type(10) .corner-rank > em {
+  letter-spacing: -1px
+}
+
+.module-slide-a {
+  display: block;
+  width: 4.125rem;
+  padding: .75rem .5rem .5rem
+}
+
+.module-slide-img {
+  display: block;
+  width: inherit;
+  height: 5.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .3)
+}
+
+.module-slide-caption {
+  font-size: .8125rem;
+  line-height: 1.25;
+  overflow: hidden;
+  max-height: 2.125rem;
+  margin: .5rem 0 .125rem;
+  word-break: break-all;
+}
+
+.module-slide-author {
+  font-size: .75rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #969ba3
+}
+

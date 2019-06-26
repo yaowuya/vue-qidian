@@ -14,16 +14,20 @@ export default new Router({
       component: Shelf
     },{
       path:"/home",
-      name:"home",
+      name:"Home",
       component:() => import(/* webpackChunkName: "about" */ './views/Home')
     },
     {
       path: '/bookList',
-      name: 'bookList',
+      name: 'BookList',
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ './views/BookList')
+    },{
+      path:"/bookDetail",
+      name:"BookDetail",
+      component:() => import(/* webpackChunkName: "about" */ './views/BookDetail')
     }
   ],
   scrollBehavior(to, from, savedPosition) {
