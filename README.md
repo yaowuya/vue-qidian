@@ -17,3 +17,6 @@
 
 >vue 在data(){}中赋值为null时，会报错：Cannot read property 'book' of null"
 解决办法是在根元素上做个判断 v-if="book !==null"
+
+>在router.js中设置路由参数 path:"/b/:id",这种情况下，
+$router.go(-1) 不会丢失参数。否则会丢失参数

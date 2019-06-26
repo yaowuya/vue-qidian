@@ -1,6 +1,6 @@
 <template>
   <div class="book-detail">
-    <Header item-name=""></Header>
+    <Header title="书籍详情" item-name=""></Header>
     <book-info @load-result="loadResult"></book-info>
     <review></review>
     <recommend></recommend>
@@ -10,8 +10,8 @@
 <script>
   import Header from "../components/Header"
   import {mapState,mapMutations} from "vuex"
-  import api from "../api/api"
   import {BOOK_PAGE} from "../utils/storage"
+  import {loading} from "../utils/toast"
   import BookInfo from "../components/BookInfo";
   import Review from "../components/Review";
   import Recommend from "../components/Recommend";
@@ -37,16 +37,17 @@
       ])
     },
     created(){
-      this.id=this.$route.params.id;
-      this.title=this.$route.params.title;
+      loading.showLoading();
       this.SET_HEADER_INFO({
-        title:this.title,
-        type:BOOK_PAGE,
+        title: '同类推荐',
+        type: BOOK_PAGE,
         items:[]
       });
+      this.id=this.$route.params.id||this.curBook.id;
+      this.title=this.$route.params.title;
       let isInShelf=false;
       for(let book of Object.values(this.shelfBookList)) {
-        if (book.id === this.$route.params.id) {
+        if (book.id === this.id) {
           isInShelf = true;
           this.SET_CUR_BOOK(book);
           break;
@@ -54,7 +55,7 @@
       }
       if(!isInShelf){
         this.SET_CUR_BOOK({
-          id: this.$route.params.id,	//书籍id
+          id: this.id,	//书籍id
           title: this.$route.params.title,					//书名
           cover: '',					//封面
           author: '',					//作者
@@ -72,7 +73,7 @@
         "SET_CUR_BOOK"
       ]),
       loadResult(){
-
+        loading.closeLoding();
       }
     }
   }

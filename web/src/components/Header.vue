@@ -1,9 +1,9 @@
 <template>
   <div class="header">
-    <van-nav-bar  :z-index="100">
+    <van-nav-bar :z-index="100">
       <div slot="left">
-        <van-icon class="fs-18 text-gray" class-prefix="my-icon" name="ico-left-arrow" @click="goBack"/>
-        <span class="header-title">{{this.headerTitle}}</span>
+        <van-icon class="fs-18 text-gray" class-prefix="my-icon" name="ico-left-arrow" @click="$router.go(-1)"/>
+        <span class="header-title">{{title}}</span>
       </div>
       <!--headerItems值如果为空，头部中间部分就为空-->
       <div slot="title" class="pt-2" v-if="this.headerItems.length>0">
@@ -20,7 +20,7 @@
       </div>
       <div slot="right">
         <van-icon class="fs-18 mr-1 text-gray" class-prefix="my-icon" name="searchicon"/>
-        <van-icon v-if="isHomePage"  class="fs-18 text-red mt-1"
+        <van-icon v-if="isHomePage" class="fs-18 text-red mt-1"
                   class-prefix="my-icon"
                   name="shujia"
                   @click="toShelf"
@@ -47,8 +47,8 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex';
-  import {HOME_PAGE} from "../utils/storage"
+  import { mapState } from 'vuex'
+  import { HOME_PAGE } from '../utils/storage'
   import Navbar from '../components/Navbar'
 
   export default {
@@ -56,54 +56,52 @@
     props: {
       itemName: {
         type: String,
-        default:"",
+        default: '',
         required: true
-      }
+      },
+      title: { type: String, required: true }
     },
-    components:{
+    components: {
       Navbar
     },
     computed: {
       ...mapState([
-        "headerTitle",
-        "headerType",
-        "headerItems"
+        'headerTitle',
+        'headerType',
+        'headerItems'
       ])
     },
-    data() {
+    data () {
       return {
         guide: {
-          icon: "zhang",
+          icon: 'zhang',
           active: false
         },
         tabarItem: 5,
         isHomePage: false,
-        itemType:""
+        itemType: ''
       }
     },
-    created() {
+    created () {
       if (this.headerType === HOME_PAGE) {
-        this.isHomePage = true;
+        this.isHomePage = true
       } else {
-        this.isHomePage = false;
+        this.isHomePage = false
       }
-      this.itemType=this.itemName
+      this.itemType = this.itemName
     },
     methods: {
-      goBack(){
-        return this.$router.go(-1)
+      itemChange (item) {
+        this.itemType = item
+        this.$emit('item-change', item)
       },
-      itemChange(item) {
-        this.itemType = item;
-        this.$emit('item-change', item);
+      toggleGuide () {
+        this.tabarItem = 5
+        this.guide.active = !this.guide.active
+        this.guide.active ? this.guide.icon = 'x' : this.guide.icon = 'zhang'
       },
-      toggleGuide() {
-        this.tabarItem = 5;
-        this.guide.active = !this.guide.active;
-        this.guide.active ? this.guide.icon = "x" : this.guide.icon = "zhang";
-      },
-      toShelf() {
-         return this.$router.push({path:"/"})
+      toShelf () {
+        return this.$router.push({ path: '/' })
       }
     }
   }
@@ -111,9 +109,11 @@
 
 <style scoped lang="scss">
   @import "../assets/styles/variable";
-  .van-nav-bar{
-    background-color: rgba(255,255,255,0.2) !important;//透明
+
+  .van-nav-bar {
+    background-color: rgba(255, 255, 255, 0.2) !important; //透明
   }
+
   .header {
     position: relative;
     height: 2.75rem;

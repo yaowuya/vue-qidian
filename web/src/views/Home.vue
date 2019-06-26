@@ -1,7 +1,7 @@
 <template>
   <!--主页-->
   <div class="home">
-    <Header :item-name="sex" @item-change="itemChange" ></Header>
+    <Header title="主页" :item-name="sex" @item-change="itemChange" ></Header>
     <div class="swipe-container">
       <van-swipe :autoplay="3000"
                  show-indicators
@@ -35,7 +35,7 @@
             <span class="module-title-desc">{{module.bookType}}</span>
           </div>
           <div class="module-header-r">
-            <router-link :to="{ name: 'BookList', params: {id : module._id,title:module.title} }" class="module-header-btn">
+            <router-link :to="{ name: 'BookList', params: {id : module._id} }" class="module-header-btn">
               更多
               <svg-icon class="text-lowergrey" icon-class="right-arrow"/>
             </router-link>
@@ -48,8 +48,8 @@
 </template>
 
 <script>
-  import {mapState, mapMutations} from 'vuex'
-  import {SHELF_PAGE, HOME_PAGE} from '../utils/storage'
+  import { mapMutations} from 'vuex'
+  import { HOME_PAGE} from '../utils/storage'
   import api from "../api/api"
   import {loading} from "../utils/toast"
   import Header from '../components/Header'

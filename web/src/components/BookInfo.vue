@@ -33,8 +33,10 @@
           </div>
         </div>
         <div class="book-detail-btn d-flex jc-between">
-          <van-button type="danger btn-group-cell" size="mini">免费试读</van-button>
-          <van-button type="default btn-group-cell" size="mini">加入书架</van-button>
+          <van-button type="danger btn-group-cell" size="small">免费试读</van-button>
+          <van-button @click="addToShelf" type="default btn-group-cell" :disabled="isAdded" size="small">
+            {{isAdded?"已在书架":"加入书架"}}
+          </van-button>
         </div>
 
       </div>
@@ -96,7 +98,8 @@
     data() {
       return {
         book: null,
-        isEnabled: true
+        isEnabled: true,
+        isAdded: false
       }
     },
     filters: {
@@ -106,7 +109,8 @@
     },
     computed: {
       ...mapState([
-        'curBook'
+        'curBook',
+        'shelfBookList'
       ]),
       cover() {
         return staticPath + this.book.cover;
@@ -120,6 +124,7 @@
 
     },
     created() {
+      this.isAdded = this.curBook.isInShelf;
       api.getBook(this.curBook.id).then(data => {
         this.book = data;
         console.log(this.book);
@@ -129,6 +134,7 @@
         tmpBook.author = data.author;
         tmpBook.lastChapter = data.lastChapter;
         tmpBook.updated = data.updated;
+        console.log("tmpBook",tmpBook);
         this.SET_CUR_BOOK(tmpBook);
         this.$nextTick(function () {
           this.$emit('load-result');
@@ -138,10 +144,19 @@
     },
     methods: {
       ...mapMutations([
-        'SET_CUR_BOOK'
+        'SET_CUR_BOOK',
+        'ADD_TO_SHELF'
       ]),
       spreadIntro: function (e) {
         this.isEnabled = !this.isEnabled;
+      },
+      addToShelf: function() {
+        let book = this.curBook;
+        book.isInShelf = true;
+        this.SET_CUR_BOOK(book);
+        this.ADD_TO_SHELF(book);
+        this.isAdded = true;
+        console.log("click:",book)
       }
     }
   }
@@ -224,6 +239,8 @@
         display: inline-block;
         overflow: hidden;
         height: 1rem;
+        width: 5.375rem  /* 86/16 */ ;
+        overflow: hidden;
       }
     }
 

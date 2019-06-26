@@ -55,7 +55,8 @@
       setAvatar(avatar) {
         return staticPath + avatar;
       }
-    },computed: {
+    },
+    computed: {
       ...mapState([
         'curBook'
       ])

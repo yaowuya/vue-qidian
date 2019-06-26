@@ -1,7 +1,7 @@
 <template>
   <ol class="book-ol book-ol-normal">
     <li class="book-li" v-for="book in bookList" :key="book._id">
-      <router-link :to="{name:'BookDetail',params:{id:book._id,title:book.title}}" class="book-layout">
+      <router-link :to="{name:'BookDetail',params:{id:book._id}}" class="book-layout">
         <img :src="book.cover|setCover" alt="" class="book-cover">
         <div class="book-cell">
           <h4 class="book-title">

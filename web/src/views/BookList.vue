@@ -1,6 +1,6 @@
 <template>
   <div class="book-list" ref="list">
-    <Header item-name=""></Header>
+    <Header :title="title" item-name=""></Header>
     <list-card :book-list="list" v-if="list.length > 0"></list-card>
     <div class="text-center fs-13 text-gray my-2" v-if="isEnding">没有更多了</div>
   </div>
@@ -11,7 +11,7 @@
   import {BOOK_PAGE,debounce} from "../utils/storage"
   import api from "../api/api"
   import {loading} from "../utils/toast"
-  import {mapMutations} from "vuex"
+  import {mapState,mapMutations} from "vuex"
   import ListCard from '../components/ListCard'
 
   export default {
@@ -34,15 +34,21 @@
       }
     },
     computed:{
+      ...mapState([
+        'headerTitle',
+        'headerType'
+      ])
     },
     created() {
-      this.id = this.$route.params.id;
-      this.title=this.$route.params.title;
       this.SET_HEADER_INFO({
-        title: this.title,
-        type: BOOK_PAGE,
+        title:this.headerTitle,
+        type: this.headerType,
         items: [],
       });
+      if (this.headerType === BOOK_PAGE) {
+        this.title = this.headerTitle;
+      }
+      this.id = this.$route.params.id;
       this.fetchData();
       loading.showLoading();
     },
@@ -74,6 +80,7 @@
                 this.isEnding=true;
                 return [];
               }
+              this.title = data[0].node.title;
               data = data.map(value => {
                 return value.book;
               });

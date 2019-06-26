@@ -1,7 +1,7 @@
 <template>
   <!--  我的书架-->
   <div class="shelf">
-    <Header :item-name="itemName" @item-change="shelfChange"></Header>
+    <Header title="书架" :item-name="itemName" @item-change="shelfChange"></Header>
     <div class="pa w-100 h-100 d-flex jc-center ai-center">
       <van-icon class="icon-body fs-18 mr-1 text-gray" class-prefix="my-icon" name="read"/>
     </div>

@@ -7,7 +7,7 @@
             <h3 class="module-title">同类推荐</h3>
           </div>
           <div class="module-header-r">
-            <router-link :to="{ name: 'BookList', params: {id : curBook._id,title: curBook.title} }" class="module-header-btn">
+            <router-link :to="{ name: 'BookList', params: {id : curBook.id}}" class="module-header-btn">
               更多
               <svg-icon class="text-lowergrey" icon-class="right-arrow"/>
             </router-link>
