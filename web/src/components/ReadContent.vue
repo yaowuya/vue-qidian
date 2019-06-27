@@ -1,6 +1,8 @@
 <template>
   <section class="read-content">
+    <div class="page-read">
 
+    </div>
   </section>
 </template>
 
@@ -29,7 +31,27 @@
       ])
     },
     data() {
-      return {}
+      return {
+        isAdded: false,
+        isShowOpt: false,
+        isShowSet: false,
+        skinBgList: ['skin-default', 'skin-blue', 'skin-green', 'skin-pink', 'skin-dark', 'skin-light']
+      }
+    },
+    created() {
+      this.isAdded = this.curBook.isInShelf;
+      if (!this.skinBgList.includes(this.skinColor)) {
+        this.SET_SKIN_COLOR('skin-default');
+      }
+    },
+    methods:{
+      ...mapMutations([
+        'SET_NIGHT_MODE',
+        'SET_SKIN_COLOR',
+        'SET_FONT_SIZE',
+        'SET_CUR_BOOK',
+        'ADD_TO_SHELF'
+      ]),
     }
   }
 </script>
