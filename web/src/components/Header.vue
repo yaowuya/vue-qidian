@@ -39,7 +39,7 @@
           <Navbar></Navbar>
         </nav>
         <div class="guide-footer">
-          <van-button class="btn" data-size="14" type="danger" size="small">我的书架</van-button>
+          <van-button @click="toShelf" class="btn" data-size="14" type="danger" size="small">我的书架</van-button>
         </div>
       </div>
     </div>
@@ -101,7 +101,7 @@
         this.guide.active ? this.guide.icon = 'x' : this.guide.icon = 'zhang'
       },
       toShelf () {
-        return this.$router.push({ path: '/' })
+        return this.$router.push({ name:"Shelf" })
       }
     }
   }

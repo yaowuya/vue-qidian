@@ -23,11 +23,15 @@ export default new Router({
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/BookList')
+      component: () => import(/* webpackChunkName: "BookList" */ './views/BookList')
     },{
       path:"/bookDetail/:id",
       name:"BookDetail",
-      component:() => import(/* webpackChunkName: "about" */ './views/BookDetail')
+      component:() => import('./views/BookDetail')
+    },{
+      path:"/read/:id",
+      name:"Read",
+      component:()=>import('./views/Read')
     }
   ],
   scrollBehavior(to, from, savedPosition) {

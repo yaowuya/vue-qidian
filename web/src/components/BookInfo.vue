@@ -200,32 +200,8 @@
     }
   }
 
-  .book-layout {
-    position: relative;
-    display: block;
-    overflow: hidden;
-    padding: 1rem;
-    transition: padding-left .15s;
-  }
-
-  .book-cover {
-    font-size: 0;
-    float: left;
-    width: 4.125rem;
-    height: 5.5rem;
-    margin-right: .5rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
-  }
-
   .book-cell {
     overflow: hidden;
-
-    .book-title {
-      line-height: 1.4;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
 
     .book-rand-a {
       font-size: .8125rem;
@@ -329,11 +305,6 @@
       text-align: right;
       background: linear-gradient(to right, rgba(255, 255, 255, 0), #fff 1rem);
     }
-  }
-
-  .book-meta {
-    font-size: .75rem;
-    overflow: hidden;
   }
 
   .book-status {

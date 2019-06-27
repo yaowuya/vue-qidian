@@ -1,6 +1,6 @@
 <template>
-  <div id="app" class="unlogin-page bg-lowergrey">
-    <router-view/>
+  <div id="app" class="unlogin-page">
+    <router-view :key="$route.path"/>
   </div>
 </template>
 <script>
