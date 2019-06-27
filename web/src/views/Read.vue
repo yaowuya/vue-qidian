@@ -34,7 +34,23 @@
       ])
     },
     watch:{
-
+      chapters: function() {
+        if (this.curBook.readChapter !== '') {
+          // 去书架中取书籍的历史阅读记录
+          for (let [idx, chapter] of Object.entries(this.chapters)) {
+            if (this.curBook.readChapter === chapter.id) {
+              this.readIndex = idx;
+              break;
+            }
+          }
+        }
+        this.fetchChapterContent(this.chapters[this.readIndex].id);
+      },
+      readIndex: function() {
+        let book = this.curBook;
+        book.readChapter = this.chapters[this.readIndex].id;
+        this.SET_CUR_BOOK(book);
+      }
     },
     created() {
       this.bookId=this.$route.params.id;

@@ -29,7 +29,7 @@
                   更新至 {{book.lastChapter}}
                 </p>
                 <span class="book-meta-r">
-                  <svg-icon icon-class="delete" @click="deleteBook(book.id)"></svg-icon>
+                  <svg-icon icon-class="delete" @click.prevent="deleteBook(book.id)"></svg-icon>
                 </span>
               </div>
             </router-link>
