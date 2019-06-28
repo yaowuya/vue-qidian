@@ -20,7 +20,7 @@ const mutations = {
     }
 
     state.nightMode = getStore('NIGHTMODE') === 'true' ? true : false;
-    state.fontSize = Number.isInteger(getStore('FONTSIZE')) ? parseInt(getStore('FONTSIZE')) : 14;
+    state.fontSize = Number.isInteger(getStore('FONTSIZE')) ? parseInt(getStore('FONTSIZE')) : 16;
     state.skinColor = getStore('SKINCOLOR');
   },
 

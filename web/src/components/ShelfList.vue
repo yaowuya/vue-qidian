@@ -11,29 +11,31 @@
               <h4 class="book-title">{{book.title}}</h4>
             </router-link>
           </div>
-          <router-link class="mybook-to-goon" :to="{}">
-            <div class="book-title-x">
-              <div class="book-title-r text-gray">{{book.updated|time}}</div>
-            </div>
-            <div class="book-meta">
-              <p class="ell">
-                <svg-icon class="text-lowergrey" icon-class="seeusero"/>
-                {{book.author}}{{book.readChapter.length>0?'|读至'+book.readChapter:book.readChapter}}
-              </p>
-            </div>
-          </router-link>
-          <div class="rel">
-            <router-link class="mybook-to-new" :to="{name:'Read',params:{id:book.id}}">
+          <router-link :to="{name:'Read',params:{id:book.id}}">
+            <div class="mybook-to-goon">
+              <div class="book-title-x">
+                <div class="book-title-r text-gray">{{book.updated|time}}</div>
+              </div>
               <div class="book-meta">
-                <p class="cell">
-                  更新至 {{book.lastChapter}}
+                <p class="ell">
+                  <svg-icon class="text-lowergrey" icon-class="seeusero"/>
+                  {{book.author}}
                 </p>
-                <span class="book-meta-r">
+              </div>
+            </div>
+            <div class="rel">
+              <div class="mybook-to-new">
+                <div class="book-meta">
+                  <p class="cell">
+                    更新至 {{book.lastChapter}}
+                  </p>
+                  <span class="book-meta-r">
                   <svg-icon icon-class="delete" @click.prevent="deleteBook(book.id)"></svg-icon>
                 </span>
+                </div>
               </div>
-            </router-link>
-          </div>
+            </div>
+          </router-link>
 
         </div>
       </li>

@@ -289,16 +289,6 @@ aria {
   background: #fff
 }
 
-.skin-pink .page-read,
-.skin-pink .page-read-cover {
-  background-color: #F8C9C9;
-}
-
-.skin-dark .page-read,
-.skin-dark .page-read-cover {
-  background-color: #3E4349;
-}
-
 .read-night {
   background-color: #1a1a1a
 }
@@ -306,7 +296,7 @@ aria {
 .read-night .page-read,
 .read-night .page-read-cover,
 .read-night .page-read-top {
-  color: rgba(255, 255, 255, .5);
+  color: rgba(255, 255, 255, .5) !important;
   background: #1a1a1a
 }
 
@@ -325,4 +315,37 @@ aria {
   background-color: rgba(255, 255, 255, .05)
 }
 
+.read-skin-default {
+  background: #c4b395;
+}
+.read-skin-blue {
+  background: #cad9e8
+}
+.read-skin-green {
+  background: #d1edd1
+}
+.read-skin-light {
+  background: #e6e6e6
+}
 //--------end
+.btn-group {
+  display: table;
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  table-layout: fixed
+}
+.btn-group-cell {
+  font-size: 100%;
+  font-weight: 400;
+  display: table-cell
+}
+
+.center{
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+}

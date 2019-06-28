@@ -33,7 +33,7 @@
           </div>
         </div>
         <div class="book-detail-btn d-flex jc-between">
-          <van-button type="danger btn-group-cell" size="small">免费试读</van-button>
+          <van-button type="danger btn-group-cell" size="small" @click="toRead">免费试读</van-button>
           <van-button @click="addToShelf" type="default btn-group-cell" :disabled="isAdded" size="small">
             {{isAdded?"已在书架":"加入书架"}}
           </van-button>
@@ -48,7 +48,7 @@
       </span>
     </div>
     <div class="book-meta book-status bg-white">
-      <router-link :to="{}">
+      <router-link :to="{ name: 'Read', params: { id: book._id }, query: { menu: true } }">
         <div class="float-left">
           <strong class="book-spt">目录</strong>
         </div>
@@ -156,7 +156,10 @@
         this.SET_CUR_BOOK(book);
         this.ADD_TO_SHELF(book);
         this.isAdded = true;
-        console.log("click:",book)
+        console.log("click:",book);
+      },
+      toRead(){
+        return this.$router.push({name:"Read",params:{id:this.curBook.id}})
       }
     }
   }
