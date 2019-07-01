@@ -159,7 +159,7 @@
       if (!this.curBook.isInShelf && !this.isFromMenu) {
         Dialog.confirm({
           title: '温馨提示',
-          message: '是否确定从书架中删除'
+          message: '喜欢本书就加入书架吧'
         }).then(() => {
           // on confirm
           let book = this.curBook;
