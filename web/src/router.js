@@ -12,10 +12,10 @@ export default new Router({
       path: '/',
       name: 'Shelf',
       component: Shelf
-    },{
-      path:"/home",
-      name:"Home",
-      component:() => import(/* webpackChunkName: "about" */ './views/Home')
+    }, {
+      path: "/home",
+      name: "Home",
+      component: () => import(/* webpackChunkName: "about" */ './views/Home')
     },
     {
       path: '/bookList/:id',
@@ -24,15 +24,31 @@ export default new Router({
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "BookList" */ './views/BookList')
+    }, {
+      path: "/bookDetail/:id",
+      name: "BookDetail",
+      component: () => import('./views/BookDetail')
+    }, {
+      path: "/read/:id",
+      name: "Read",
+      component: () => import('./views/Read')
+    }, {
+      path: "/category",
+      name: "Category",
+      component: () => import('./views/Category')
+    }, {
+      path: "/catList/:major",
+      name: "CatList",
+      component: () => import('./views/CatList')
     },{
-      path:"/bookDetail/:id",
-      name:"BookDetail",
-      component:() => import('./views/BookDetail')
+      path: '/rank',
+      name: 'Rank',
+      component: () => import('./views/Rank')
     },{
-      path:"/read/:id",
-      name:"Read",
-      component:()=>import('./views/Read')
-    }
+      path: '/search',
+      name: 'Search',
+      component: () => import('./views/Search')
+    },
   ],
   scrollBehavior(to, from, savedPosition) {
     return {

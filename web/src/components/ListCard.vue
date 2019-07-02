@@ -1,45 +1,72 @@
 <template>
   <ol class="book-ol book-ol-normal">
     <li class="book-li" v-for="book in bookList" :key="book._id">
-      <router-link :to="{name:'BookDetail',params:{id:book._id}}" class="book-layout">
-        <img :src="book.cover|setCover" alt="" class="book-cover">
-        <div class="book-cell">
-          <h4 class="book-title">
-            {{book.title}}
-          </h4>
-          <p class="book-desc">
-            {{ book.shortIntro }}
-          </p>
-          <div class="book-meta">
-            <div class="book-meta-l">
-              <span class="book-author" role="option">
-                <svg-icon class="text-lowergrey" icon-class="seeusero"/>
-                {{ book.author }}
-              </span>
-            </div>
-            <div class="book-meta-r">
-              <span class="tag-small-group origin-right">
-                <template v-if="isRatio">
-                  <em class="tag-small text-red">
-                    {{ book.retentionRatio | setRetentionRatio }}%留存
+      <div class="book-layout">
+        <router-link :to="{name:'BookDetail',params:{id:book._id}}">
+          <img :src="book.cover|setCover" alt="" class="book-cover">
+          <div class="book-cell">
+            <h4 class="book-title">
+              {{book.title}}
+            </h4>
+            <template v-if="!isAuthor">
+              <p class="book-desc">
+                {{ book.shortIntro }}
+              </p>
+              <div class="book-meta">
+                <div class="book-meta-l">
+                <span class="book-author" role="option" >
+                  <svg-icon class="text-lowergrey" icon-class="seeusero"/>
+                  {{ book.author }}
+                </span>
+                </div>
+                <div class="book-meta-r">
+                <span class="tag-small-group origin-right">
+                  <template v-if="isRatio">
+                    <em class="tag-small text-red">
+                      {{ book.retentionRatio | setRetentionRatio }}%留存
+                    </em>
+                  </template>
+                  <template v-else>
+                    <em class="tag-small text-gray">
+                      {{ book.majorCate }}
+                    </em>
+                    <em class="tag-small text-red">
+                      {{ book.isSerial ? '连载中' : '完结' }}
+                    </em>
+                  </template>
+                  <em class="tag-small text-blue">
+                    {{book.latelyFollower|setLatelyFollower}}人气
                   </em>
-                </template>
-                <template v-else>
-                  <em class="tag-small text-gray">
-                    {{ book.majorCate }}
+                </span>
+                </div>
+              </div>
+            </template>
+            <template v-else>
+              <p class="book-author-rank">
+                <span class="book-author" role="option" >
+                  <svg-icon class="text-lowergrey" icon-class="seeusero"/>
+                  {{ book.author }}
+                </span>
+              </p>
+              <p class="book-desc book-desc-rank">
+                {{ book.shortIntro }}
+              </p>
+              <div class="book-meta">
+                <span class="tag-small-group-rank">
+                    <em class="tag-small text-red">
+                      {{ book.retentionRatio | setRetentionRatio }}%留存
+                    </em>
+                  <em class="tag-small text-blue">
+                    {{book.latelyFollower|setLatelyFollower}}人气
                   </em>
-                  <em class="tag-small text-red">
-                    {{ book.isSerial ? '连载中' : '完结' }}
-                  </em>
-                </template>
-                <em class="tag-small text-blue">
-                  {{book.latelyFollower|setLatelyFollower}}人气
-                </em>
-              </span>
-            </div>
+                </span>
+              </div>
+            </template>
+
+
           </div>
-        </div>
-      </router-link>
+        </router-link>
+      </div>
     </li>
   </ol>
 </template>
@@ -58,7 +85,8 @@
     },
     data () {
       return {
-        isRatio: false
+        isRatio: false,
+        isAuthor:false,
       }
     },
     computed: {
@@ -68,6 +96,7 @@
     },
     created () {
       this.headerType === RANK_PAGE ? this.isRatio = true : this.isRatio = false
+      this.headerType === RANK_PAGE ? this.isAuthor = true : this.isAuthor = false
     },
     filters: {
       setLatelyFollower (latelyFollower) {
@@ -101,7 +130,7 @@
     }
 
     .book-li {
-      ::after {
+      &::after {
         display: block;
         margin-top: -1Px;
         margin-left: 1rem;
@@ -110,26 +139,13 @@
         border-bottom: 1Px solid #f0f1f2;
       }
 
-      :last-child::after {
+      &:last-child::after {
         display: none
       }
     }
 
     .book-layout {
-      position: relative;
-      display: block;
-      overflow: hidden;
       padding: 0.6rem;
-      transition: padding-left 0.15s;
-    }
-
-    .book-cover {
-      font-size: 0;
-      float: left;
-      width: 4.125rem;
-      height: 5.5rem;
-      margin-right: .5rem;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
     }
 
     .book-cell {
@@ -137,31 +153,16 @@
     }
 
     .book-title {
-      line-height: 1.4;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
       font-size: 1rem;
     }
 
     .book-desc {
-      font-size: 0.875rem /* 14/16 */
-    ;
+      font-size: 0.875rem /* 14/16 */;
       line-height: 1.125rem;
       overflow: hidden;
       margin: 0.5rem 0;
       color: #969ba3
     }
-
-    .book-meta {
-      font-size: 0.75rem;
-      overflow: hidden;
-    }
-
-    .book-meta-l {
-      float: left;
-    }
-
     .book-author {
       font-size: 0.8125rem;
       display: block;
@@ -177,7 +178,6 @@
       position: relative;
       float: right;
       position: relative;
-
       .tag-small-group {
         position: absolute;
         top: -0.375rem;
@@ -187,6 +187,21 @@
     }
 
     .tag-small-group {
+      display: inline-block;
+      transform: scale(.5);
+
+      .tag-small:first-child {
+        margin-left: 0;
+      }
+    }
+    .book-author-rank{
+      line-height: 1.1rem;
+    }
+
+    .tag-small-group-rank{
+      position: absolute;
+      left: 1.8rem;
+      white-space: nowrap;
       display: inline-block;
       transform: scale(.5);
 
@@ -221,6 +236,10 @@
         border-radius: .11111em;
       }
     }
+  }
+
+  .book-desc-rank{
+    height: 1rem !important;
   }
 
   .book-ol-normal {

@@ -1,5 +1,5 @@
 <template>
-  <div class="header">
+  <div :class="[{'header':!isFixed,'header-fixed':isFixed}]" >
     <van-nav-bar :z-index="100">
       <div slot="left">
         <van-icon class="fs-18 text-gray" class-prefix="my-icon" name="ico-left-arrow" @click="$router.go(-1)"/>
@@ -19,7 +19,7 @@
         </div>
       </div>
       <div slot="right">
-        <van-icon class="fs-18 mr-1 text-gray" class-prefix="my-icon" name="searchicon"/>
+        <van-icon class="fs-18 mr-1 text-gray" class-prefix="my-icon" name="searchicon" @click="goSearch"/>
         <van-icon v-if="isHomePage" class="fs-18 text-red mt-1"
                   class-prefix="my-icon"
                   name="shujia"
@@ -56,10 +56,10 @@
     props: {
       itemName: {
         type: String,
-        default: '',
-        required: true
+        default: ''
       },
-      title: { type: String, required: true }
+      title: { type: String, required: true },
+      isFixed:{type:Boolean,default: false}
     },
     components: {
       Navbar
@@ -102,6 +102,9 @@
       },
       toShelf () {
         return this.$router.push({ name:"Shelf" })
+      },
+      goSearch(){
+        return this.$router.push({name:"Search"})
       }
     }
   }
@@ -117,6 +120,17 @@
   .header {
     position: relative;
     height: 2.75rem;
+  }
+
+  .header-fixed{
+    position: fixed;
+    height: 2.75rem;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 3;
+    background-color: map_get($colors,"white");
+    /*border-bottom: 0.006rem solid map_get($colors,"gray");*/
   }
 
   .header-title {
@@ -168,7 +182,7 @@
 
   .guide {
     position: fixed;
-    z-index: 3;
+    z-index: 10;
     top: 2.5rem;
     right: 0;
     bottom: 0;
