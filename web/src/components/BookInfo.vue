@@ -189,7 +189,7 @@
     height: 175vw;
     opacity: 0.2;
     opacity: calc(0.1 + 0.05);
-    filter: blur(calc(17Px + 1Px));
+    filter: blur(calc(17px + 1px));
   }
 
   .book-detail-info {
