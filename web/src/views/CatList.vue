@@ -2,7 +2,7 @@
   <section class="cat-list">
     <Header :title="title" :isFixed="true"></Header>
     <cat-bar @filter-change="filterBooks" :gender="gender" :major="major"></cat-bar>
-    <list-card :book-list="list" v-if="list.length > 0"></list-card>
+    <list-card :book-list="list" v-if="list.length > 0" style="margin-top: 9rem;"></list-card>
     <div class="text-center fs-13 text-gray my-2" v-if="isEnding">没有更多了</div>
   </section>
 </template>
