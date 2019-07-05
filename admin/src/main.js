@@ -15,9 +15,13 @@ import store from './store'
 import '@/icons' // icon
 import '@/permission' // permission control
 
+import http from "./http"
+Vue.prototype.$http = http
+
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale })
 Vue.config.productionTip = false
+
 
 new Vue({
   router,

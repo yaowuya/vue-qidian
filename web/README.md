@@ -60,6 +60,7 @@ http {
         location  / {
 			root  /root/qidian/web/dist/;		
 			index index.html index.htm;	
+			#官网介绍设置这条可以解决history路由的问题
 			try_files $uri $uri/ @router;
         }
 		
@@ -115,3 +116,4 @@ http {
 }
 
 ```
+

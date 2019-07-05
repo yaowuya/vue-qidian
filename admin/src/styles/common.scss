@@ -1,0 +1,22 @@
+//color
+@each $colorKey, $color in $colors {
+  .text-#{$colorKey} {
+    color: $color !important;
+  }
+  .bg-#{$colorKey} {
+    background-color: $color !important;
+  }
+}
+// text align
+@each $var in (left, center, right) {
+  .text-#{$var} {
+    text-align: $var !important;
+  }
+}
+
+//float
+@each $var in (left,right){
+  .f-#{$var}{
+    float:$var;
+  }
+}

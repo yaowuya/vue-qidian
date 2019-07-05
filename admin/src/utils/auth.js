@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
 
-const TokenKey = 'vue_qidian_token'
+const TokenKey = 'adminToken'
 
 export function getToken() {
   return Cookies.get(TokenKey)

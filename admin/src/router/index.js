@@ -32,11 +32,22 @@ import Layout from '@/layout'
  */
 export const constantRoutes = [
   {
+    path:"/login",
+    name:"login",
+    component:()=>import("@/views/login/login"),
+    hidden:true
+  },
+  {
+    path:"/register",
+    name:"register",
+    component:()=>import("@/views/register/register"),
+    hidden:true
+  },
+  {
     path: '/404',
     component: () => import('@/views/404'),
     hidden: true
   },
-
   {
     path: '/',
     component: Layout,

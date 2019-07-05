@@ -6,3 +6,5 @@
 
 >render(h, context){} render函数里面的时jsx语法，
 需要babel-plugin-syntax-jsx和babel-plugin-transform-vue-jsx
+
+>async函数返回一个 Promise 对象，可以使用then方法添加回调函数。
