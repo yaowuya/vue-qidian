@@ -95,14 +95,14 @@
             // this.loading = true;
             const res = await getInfo(this.registerForm.username);
             console.log(res);
-            if (res.username === this.registerForm.username) {
+            if (res!=null&&res.username === this.registerForm.username) {
               this.$message({
                 type: "false",
                 message: "该名称已经存在"
               });
               this.loading = false;
             } else {
-              const res = await this.$http.post("rest/users", this.registerForm);
+              const res = await this.$http.post("user/users", this.registerForm);
               this.$router.push({name:"login"});
               this.$message({
                 type: "success",

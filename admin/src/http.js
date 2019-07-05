@@ -25,9 +25,9 @@ http.interceptors.response.use(res => {
   return res.data
 }, err => {
   console.log("error:",err);
-  if (err.message) {
+  if (err.response.data.message) {
     Message({
-      message: err.message,
+      message: err.response.data.message,
       type: 'error',
       duration: 5 * 1000
     })
