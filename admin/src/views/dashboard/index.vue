@@ -1,7 +1,21 @@
 <template>
-  <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ name }}</div>
-  </div>
+  <section class="dashboard">
+    <el-row type="flex" justify="space-between">
+      <el-col :span="6">
+        <div class="dashboard-container">
+          <div class="dashboard-text">name: {{ name }}</div>
+        </div>
+      </el-col>
+    </el-row>
+    <el-row type="flex" justify="start">
+      <el-col :span="2">
+        <el-button type="primary" @click="addCate">同步分类</el-button>
+      </el-col>
+      <el-col :span="2">
+        <el-button type="success">成功按钮</el-button>
+      </el-col>
+    </el-row>
+  </section>
 </template>
 
 <script>
@@ -18,6 +32,11 @@ export default {
     ...mapGetters([
       'name'
     ])
+  },
+  methods:{
+    addCate(){
+
+    }
   }
 }
 </script>

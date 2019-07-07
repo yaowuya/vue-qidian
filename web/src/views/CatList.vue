@@ -64,6 +64,7 @@
         loading.showLoading();
         api.getCatBooks(this.gender, this.type, this.major, this.minor, this.page * this.limit)
           .then(data => {
+            console.log("分类数据:",data)
             if (data.length < this.limit) {
               this.isEnding = true;
               loading.closeLoding();

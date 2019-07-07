@@ -56,8 +56,29 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: '首页', icon: 'dashboard' }
     }]
+  },
+  {
+    path: '/category',
+    component: Layout,
+    redirect: '/category/categoryList',
+    name: 'category',
+    meta: { title: '分类', icon: 'example' },
+    children: [
+      {
+        path: 'categoryList',
+        name: 'categoryList',
+        component: () => import('@/views/category/categoryList'),
+        meta: { title: '分类列表' }
+      },
+      {
+        path: 'categoryEdit',
+        name: 'categoryEdit',
+        component: () => import('@/views/category/categoryEdit'),
+        meta: { title: '分类编辑' }
+      }
+    ]
   },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }

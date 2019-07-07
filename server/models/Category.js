@@ -12,4 +12,4 @@ schema.virtual('children', {
     ref: 'Category'
 })
 
-module.exports = mongoose.model('Category', schema)
+module.exports = mongoose.model('Category', schema,"Categories")
