@@ -8,3 +8,10 @@
 需要babel-plugin-syntax-jsx和babel-plugin-transform-vue-jsx
 
 >async函数返回一个 Promise 对象，可以使用then方法添加回调函数。
+
+>什么是Vue.nextTick():在下次 DOM 更新循环结束之后执行延迟回调。
+在修改数据之后立即使用这个方法，获取更新后的 DOM。在使用dialog弹出框时，
+需要this.$nextTick(() => {
+            this.$refs['ruleForm'].clearValidate();
+          });
+如果没有这样设置，弹框数据不会更新

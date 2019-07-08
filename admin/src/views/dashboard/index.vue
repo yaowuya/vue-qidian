@@ -8,11 +8,14 @@
       </el-col>
     </el-row>
     <el-row type="flex" justify="start">
-      <el-col :span="2">
-        <el-button type="primary" @click="addCate">同步分类</el-button>
+      <el-col :span="3">
+        <el-button type="primary" @click="addCate">同步一级分类</el-button>
       </el-col>
-      <el-col :span="2">
-        <el-button type="success">成功按钮</el-button>
+      <el-col :span="3">
+        <el-button type="primary" @click="addMins">同步二级分类</el-button>
+      </el-col>
+      <el-col :span="3">
+        <el-button type="success" @click="addBook">添加书籍</el-button>
       </el-col>
     </el-row>
   </section>
@@ -20,12 +23,28 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import api from "../../api/api"
 
 export default {
   name: 'Dashboard',
   data(){
     return{
-
+      typeList: [{
+        value: 'hot',
+        name: '热门'
+      }, {
+        value: 'new',
+        name: '新书'
+      }, {
+        value: 'reputation',
+        name: '好评'
+      }, {
+        value: 'over',
+        name: '完结'
+      }, {
+        value: 'monthly',
+        name: '包月'
+      }],
     }
   },
   computed: {
@@ -34,7 +53,75 @@ export default {
     ])
   },
   methods:{
-    addCate(){
+    async addCate(){
+      let del=await this.$http.delete("/rest/categories");
+      console.log("delete",del);
+      for(let type of this.typeList){
+        let create=await this.$http.post("/rest/categories",{
+          name:type.value,
+          parent:null,
+          level:"普通分类",
+          bookCount:0,
+        });
+      }
+      api.getCategory()
+        .then(async data => {
+          console.log("分类",data);
+          for (let [key, value] of Object.entries(data)) {
+            let create=await this.$http.post("/rest/categories",{
+              name:key,
+              parent:null,
+              level:"一级分类",
+              bookCount:0,
+            });
+            let cat=[];
+            for(let category of Object.values(value)){
+              cat.push({
+                name:category["name"],
+                parent:create._id,
+                level:"二级分类",
+                bookCount:category["bookCount"],
+              })
+            }
+
+            if(cat.length>0){
+              let insertMany=await this.$http.post("/rest/categories/insertMany",cat);
+              console.log("insertMany",insertMany);
+            }
+
+          }
+        })
+    },
+    async addMins(){
+      const cats=await this.$http.get("/rest/categories");
+      api.getMinorList()
+        .then(async data => {
+          let result=[];
+          for (let gender of ["female","male","picture","press"]){
+            for (let [index, elem] of Object.entries(data[gender])) {
+              for(let [key,val] of Object.entries(cats)){
+                if(elem.major===val.name){
+                  if(elem.mins.length>0){
+                    for(let mins of elem.mins){
+                      result.push({
+                        name:mins,
+                        parent:val._id,
+                        level:"三级分类",
+                        bookCount:0,
+                      })
+                    }
+                  }
+                }
+              }
+            }
+          }
+          if(result.length>0){
+            let insertMany=await this.$http.post("/rest/categories/insertMany",result);
+            console.log("insertMany",insertMany);
+          }
+        })
+    },
+    addBook(){
 
     }
   }

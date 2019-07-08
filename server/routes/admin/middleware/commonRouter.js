@@ -8,8 +8,12 @@ const router = express.Router({
 router.post("/", async (req, res) => {
     const model = await req.Model.create(req.body)
     res.send(model)
-})
-
+});
+// 批量插入
+router.post("/insertMany", async (req, res) => {
+    const model = await req.Model.insertMany(req.body)
+    res.send(model)
+});
 // 更新资源
 router.put("/:id", async (req, res) => {
     const model = await req.Model.findByIdAndUpdate(req.params.id, req.body)
@@ -17,9 +21,18 @@ router.put("/:id", async (req, res) => {
 });
 //删除资源
 router.delete("/:id", async (req, res) => {
-    await req.Model.findByIdAndDelete(req.params.id)
+    const del = await req.Model.findByIdAndDelete(req.params.id);
     res.send({
-        success: true
+        success: true,
+        data:del
+    })
+});
+//清空表
+router.delete("/", async (req, res) => {
+    const del = await req.Model.deleteMany({});
+    res.send({
+        success: true,
+        data:del
     })
 });
 
@@ -30,13 +43,12 @@ router.get("/", async (req, res) => {
         queryOptions.populate = 'parent'
     }
     //因为parent是一个id，关联了req.Model
-    const items = await req.Model.find().setOptions(queryOptions).limit(100)
+    const items = await req.Model.find().setOptions(queryOptions)
     res.send(items)
 });
 
 //资源详情
 router.get("/:id", async (req, res) => {
-    console.log("req:", req.params);
     const items = await req.Model.findById(req.params.id);
     res.send(items);
 });

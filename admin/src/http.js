@@ -10,7 +10,7 @@ const http=axios.create({
 })
 
 http.interceptors.request.use(function (config) {
-  console.log("http",config,getToken());
+  // console.log("http",config,getToken());
   // Do something before request is sent
   if (getToken()) {
     config.headers.Authorization = 'Admin ' + getToken()
