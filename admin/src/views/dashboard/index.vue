@@ -17,6 +17,9 @@
       <el-col :span="3">
         <el-button type="success" @click="addBook">添加书籍</el-button>
       </el-col>
+      <el-col :span="3">
+        <el-button type="success" @click="addChapter">获取章节</el-button>
+      </el-col>
     </el-row>
   </section>
 </template>
@@ -24,6 +27,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import api from "../../api/api"
+import book from "../../api/book"
 
 export default {
   name: 'Dashboard',
@@ -121,8 +125,62 @@ export default {
           }
         })
     },
-    addBook(){
-
+    async addBook(){
+      const commonLevel=await this.$http.post("/book/categories/multiLevel",{level:"普通分类"});
+      const firstLevel=await this.$http.post("/book/categories/multiLevel",{level:"一级分类"});
+      let bookCat=[];
+      for(let common of commonLevel){
+        for(let first of firstLevel){
+          for(let second of first.children){
+            for(let third of second.children){
+              bookCat.push({
+                gender:first.name,
+                type:common.name,
+                major:second.name,
+                minor:third.name,
+                start:0,
+                limit:20000
+              })
+            }
+          }
+        }
+      }
+      console.log("分类：",bookCat);
+      const bookData=await book.getBooksByType(bookCat);
+      console.log(bookData);
+      for(let value of bookData){
+        await this.$http.post("/rest/books/",{
+          bookId:value._id,
+          title:value.title,
+          cover:value.cover,
+          author:value.author,
+          categories: [],
+          lastChapter:value.lastChapter,
+          readChapter:"",
+          isInShelf:false,
+          sort:false,
+          majorCate:value.majorCate,
+          minorCate:value.minorCate,
+          latelyFollower:value.latelyFollower,
+          isSerial:false,
+          retentionRatio:value.retentionRatio,
+          shortIntro:value.shortIntro,
+          longIntro:"",
+          ratingCount:0,
+          ratingScore:0,
+          wordCount:0,
+          serializeWordCount:0,
+          updated:"",
+        });
+      }
+    },
+    async addChapter(){
+      api.getChapters("58310e4ee6065f1e50865328")
+        .then(data => {
+          this.chapters = data;
+          console.log("章节：", this.chapters);
+          // this.fetchChapterContent(this.chapters[0].id)
+        })
     }
   }
 }

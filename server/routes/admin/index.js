@@ -9,6 +9,9 @@ module.exports = app => {
     //用户相关
     const userRouter=require("./middleware/UserRouter");
     app.use("/admin/api/user/:resource",resourceMiddleware(),userRouter);
+    //书籍
+    const bookRouter=require("./middleware/BookRouter");
+    app.use("/admin/api/book/:resource",authMiddleware(),resourceMiddleware(),bookRouter);
 
     const multer = require('multer');
     const upload = multer({dest: __dirname + '/../../uploads'})
