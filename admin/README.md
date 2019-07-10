@@ -1,3 +1,8 @@
+### 启动
+```js
+npm run dev  //启动开发环境
+npm run prod //生产环境打包
+```
 ### 记录
 >dynamic-import-node是为了解析动态加载组件，路由的懒加载用到"=>"
 

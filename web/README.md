@@ -1,10 +1,15 @@
-# web
+### 启动
+```js
+npm run dev  //启动开发环境
+npm run prod  //生产环境打包
+```
+### web
 1. vw：1vw等于视口宽度的1%。
 2. vh：1vh等于视口高度的1%。
 3. vmin：选取vw和vh中最小的那个。
 4. vmax：选取vw和vh中最大的那个。
 
-#nginx 配置
+### nginx 配置
 ```nginx
 # For more information on configuration, see:
 #   * Official English Documentation: http://nginx.org/en/docs/

@@ -18,5 +18,24 @@ router.post("/multiLevel", async (req, res) => {
     }).lean();
     res.json(cats);
 });
+//查询多级分类
+router.post("/pagination", async (req, res) => {
+    const {pageNum=1,pageSize=10,level,name} = req.body;
+    const sort={"_id":"asc"};
+    const skipNum=(pageNum-1)*pageSize;
+    const condition={
+        $and:[
+            {level:{$regex: level,$options: 'i'}},
+            {name:{$regex:name,$options:'i'}}
+        ]
+    }
+
+    const count=await req.Model.countDocuments(condition);
+    const cats=await req.Model.find(condition).populate("parent").skip(skipNum).limit(pageSize).sort(sort);
+    res.json({
+        count:count,
+        data:cats
+    });
+});
 
 module.exports = router;

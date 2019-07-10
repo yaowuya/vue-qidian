@@ -1,18 +1,29 @@
 <template>
   <section class="category-list p-5">
-    <el-row class="mt-10">
+    <el-row class="mt-10 px-10">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item label="审批人">
-          <el-input v-model="formInline.user" placeholder="审批人"></el-input>
+        <el-form-item label="分类名称">
+          <el-select v-model="formInline.name" placeholder="请选择父级分类">
+            <el-option label="全部" value=""></el-option>
+            <el-option
+              v-for="p in parents"
+              :key="p._id"
+              :label="p.name"
+              :value="p.name">
+            </el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="活动区域">
-          <el-select v-model="formInline.region" placeholder="活动区域">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
+        <el-form-item label="分类级别">
+          <el-select v-model="formInline.level" placeholder="分类级别">
+            <el-option label="全部" value=""></el-option>
+            <el-option label="普通分类" value="普通分类"></el-option>
+            <el-option label="一级分类" value="一级分类"></el-option>
+            <el-option label="二级分类" value="二级分类"></el-option>
+            <el-option label="三级分类" value="三级分类"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">查询</el-button>
+          <el-button type="primary" @click="queryCategory">查询</el-button>
         </el-form-item>
       </el-form>
     </el-row>
@@ -22,7 +33,9 @@
         border
         style="width: 100%"
         max-height="400"
-        @selection-change="handleSelectionChange">
+        @selection-change="handleSelectionChange"
+        :default-sort="{prop: '_id', order: 'ascending'}"
+      >
         <el-table-column
           type="selection"
           min-width="55">
@@ -30,17 +43,19 @@
         <el-table-column
           fixed
           prop="_id"
+          sortable
           label="ObjectId"
           min-width="240">
         </el-table-column>
         <el-table-column
-          prop="name"
-          label="分类名称"
+          prop="level"
+          sortable=""
+          label="分类级别"
           min-width="120">
         </el-table-column>
         <el-table-column
-          prop="bookCount"
-          label="数目"
+          prop="name"
+          label="分类名称"
           min-width="120">
         </el-table-column>
         <el-table-column
@@ -49,9 +64,14 @@
           min-width="120">
         </el-table-column>
         <el-table-column
+          prop="bookCount"
+          label="数目"
+          min-width="120">
+        </el-table-column>
+        <el-table-column
           fixed="right"
           label="操作"
-          min-width="100">
+          min-width="120">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -66,15 +86,17 @@
         </el-table-column>
       </el-table>
     </el-row>
-    <el-row>
+    <el-row class="mt-10">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="currentPage4"
-        :page-sizes="[100, 200, 300, 400]"
-        :page-size="100"
+        :current-page="pageNum"
+        :page-sizes="pageSizeList"
+        :page-size="pageSize"
+        :pager-count="pageCount"
+        background
         layout="total, sizes, prev, pager, next, jumper"
-        :total="400"
+        :total="total"
         class="f-right"
       >
       </el-pagination>
@@ -117,8 +139,9 @@
     data() {
       return {
         formInline: {
-          user: '',
-          region: ''
+          name: "",
+          level: "",
+          parent: ""
         },
         tableData: [],
         multipleSelection: [],
@@ -146,29 +169,30 @@
           ]
         },
         parents: [],
-        currentPage4: 4
+        pageNum: 1,
+        pageSize: 10,
+        pageSizeList: [10, 20, 50, 100, 200],
+        pageCount: 11,
+        total: 0
       }
     },
     created() {
       this.fetchData();
+      this.onSearch();
     },
     methods: {
       async fetchData() {
         const res = await this.$http.get("/rest/categories");
-        this.tableData = res;
         this.parents = res;
       },
       handleEdit(index, row) {
         this.dialogVisible = true;
-        // for (let key in row) {
-        //   this.$set(this.dialogForm,key,row[key]);
-        // };
-        this.dialogForm=Object.assign({}, row);
-
+        this.dialogForm = Object.assign({}, row);
+        this.dialogForm.parent==null?this.dialogForm.parent={_id:""}:this.dialogForm.parent;
+        console.log(this.dialogForm, row);
         this.$nextTick(() => {
           this.$refs['ruleForm'].clearValidate();
         });
-        console.log(this.dialogForm,row);
       },
       handleDelete(index, row) {
         console.log(index, row);
@@ -178,12 +202,29 @@
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
+        this.pageSize=val;
+        this.onSearch();
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
+        this.pageNum=val;
+        this.onSearch();
+
       },
-      onSubmit() {
-        console.log('submit!');
+      queryCategory(){
+        this.pageNum=1;
+        this.onSearch();
+      },
+      async onSearch() {
+        const res=await this.$http.post("/book/categories/pagination",{
+          pageNum:this.pageNum,
+          pageSize:this.pageSize,
+          level:this.formInline.level,
+          name:this.formInline.name
+        });
+        this.tableData = res.data;
+        this.total=res.count;
+        console.log("onSearch",res);
       },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
