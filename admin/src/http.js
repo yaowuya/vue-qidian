@@ -1,12 +1,14 @@
 import axios from "axios"
 import Vue from "vue"
 import router from "./router"
-import { MessageBox, Message } from 'element-ui'
+import {MessageBox, Message} from 'element-ui'
 import {getToken} from "./utils/auth"
 
-const http=axios.create({
-  baseURL: 'http://localhost:3000/admin/api',
-  timeout:5000
+
+const env = require('../config/' + (process.env.NODE_ENV || 'dev') + '.env')
+const http = axios.create({
+  baseURL: env.BASE_API || "/admin/api",
+  timeout: 5000
 })
 
 http.interceptors.request.use(function (config) {
@@ -24,7 +26,7 @@ http.interceptors.request.use(function (config) {
 http.interceptors.response.use(res => {
   return res.data
 }, err => {
-  console.log("error:",err);
+  console.log("error:", err);
   if (err.response.data.message) {
     Message({
       message: err.response.data.message,

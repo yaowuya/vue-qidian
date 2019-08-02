@@ -6,8 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "dev": "npx webpack-dev-server --config webpack.dev.js",
-    "prod": "npx webpack --config webpack.prod.js"
+    "dev": "cross-env NODE_ENV=dev npx webpack-dev-server --config webpack.dev.js",
+    "prod": "cross-env NODE_ENV=prod npx webpack --config webpack.prod.js"
   },
   "dependencies": {
     "axios": "0.18.0",
@@ -39,6 +39,7 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-2": "^6.24.1",
     "clean-webpack-plugin": "^3.0.0",
+    "cross-env": "^5.2.0",
     "css-loader": "^3.0.0",
     "eslint": "^5.16.0",
     "eslint-loader": "^2.1.2",

@@ -2,6 +2,8 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const webpack=require("webpack")
+
 
 function resolve (dir) {
   return path.join(__dirname, dir)
@@ -96,6 +98,11 @@ module.exports = {
     }
   },
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env':{
+        NODE_ENV: process.env.NODE_ENV === 'dev' ? '"dev"' : '"prod"'
+      }
+    }),
     new HtmlWebpackPlugin({
       title: '起点', // 默认值：Webpack App
       filename: 'index.html', // 默认值： 'index.html',打包到dist的名称

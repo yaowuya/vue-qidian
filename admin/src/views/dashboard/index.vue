@@ -21,6 +21,12 @@
         <el-button type="success" @click="addChapter">获取章节</el-button>
       </el-col>
     </el-row>
+    <h2>book-spider</h2>
+    <el-row type="flex" justify="start">
+      <el-col :span="3">
+        <el-button type="primary" @click="addBookSpider">同步书籍</el-button>
+      </el-col>
+    </el-row>
   </section>
 </template>
 
@@ -181,6 +187,10 @@ export default {
           console.log("章节：", this.chapters);
           // this.fetchChapterContent(this.chapters[0].id)
         })
+    },
+    async addBookSpider(){
+      let create=await this.$http.post("/spider/book",{url:"http://www.biquge.ink/"});
+      console.log(create);
     }
   }
 }
