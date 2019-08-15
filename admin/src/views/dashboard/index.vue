@@ -18,52 +18,68 @@
       <el-col :span="3">
         <el-button type="primary" @click="addChapterSpider">同步章节</el-button>
       </el-col>
+      <el-col :span="3">
+        <el-button type="primary" @click="searchCategory">查询分类</el-button>
+      </el-col>
     </el-row>
   </section>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import api from "../../api/api"
-import book from "../../api/book"
+  import { mapGetters } from 'vuex'
+  import api from '../../api/api'
+  import book from '../../api/book'
 
-export default {
-  name: 'Dashboard',
-  data(){
-    return{
-
-    }
-  },
-  computed: {
-    ...mapGetters([
-      'name'
-    ])
-  },
-  methods:{
-    async addCatSpider(){
-      let create=await this.$http.post("/spider/category",{url:"http://www.biquge.ink"});
-      console.log(create);
+  export default {
+    name: 'Dashboard',
+    data () {
+      return {}
     },
-    async addBookSpider(){
-      let create=await this.$http.post("/spider/book",{url:"http://www.biquge.ink/"});
-      console.log(create);
+    computed: {
+      ...mapGetters([
+        'name'
+      ])
     },
-    async addChapterSpider(){
-      let create=await this.$http.post("/spider/chapter",{url:"http://www.biquge.ink/11986_01986/"});
-      console.log(create);
+    methods: {
+      async addCatSpider () {
+        let create = await this.$http.post('/spider/category', { url: 'http://www.biquge.ink' })
+        console.log(create)
+      },
+      async addBookSpider () {
+        let category = await this.$http.get('/rest/categories')
+        for (let cate of category) {
+          let create = await this.$http.post('/spider/book',
+            {
+              url: cate.url,
+              type: cate.name,
+              cate: cate._id
+            })
+          console.log(create)
+        }
+      },
+      async addChapterSpider () {
+        let create = await this.$http.post('/spider/chapter', { url: 'http://www.biquge.ink/11986_01986/' })
+        console.log(create)
+      },
+      async searchCategory () {
+        let category = await this.$http.get('/rest/categories')
+        for (let cate of category) {
+          console.log(cate)
+        }
+      }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>
-.dashboard {
-  &-container {
-    margin: 30px;
+  .dashboard {
+    &-container {
+      margin: 30px;
+    }
+
+    &-text {
+      font-size: 30px;
+      line-height: 46px;
+    }
   }
-  &-text {
-    font-size: 30px;
-    line-height: 46px;
-  }
-}
 </style>

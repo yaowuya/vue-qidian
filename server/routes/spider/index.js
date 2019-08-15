@@ -6,6 +6,7 @@ module.exports = app => {
 
   const spider = require('../../utils/loadHtml')
   const cheerio = require('cheerio')
+  const utils = require('./spiderUtils')
 
   //第二种获取model方法
   const mongoose = require('mongoose')
@@ -31,43 +32,31 @@ module.exports = app => {
     })
 
     for (let resData of result) {
-      await category.create(resData);
+      await category.create(resData)
     }
 
     res.send(result)
   })
 
+  //从数据库中获取分类信息
+  router.get('/category', async (req, res) => {
+
+  })
+
   //获取书籍
   router.post('/book', async (req, res) => {
-    const { url } = req.body;
-    let htmlText = await spider.fetchByUrl(url);
-    // console.log(url,htmlText);
-    const $ = cheerio.load(htmlText);
-    const li_list = $('li', '#newscontent .l');
-
-    const result = [];
-    li_list.each(function (index, element) {
-      const el = $(element);
-      let type = el.find('.s1').text();
-      let url = el.find('.s2').children('a').attr('href');
-      let title = el.find('.s2').text();
-      let lastChapter = el.find('.s3').text();
-      let author = el.find('.s4').text();
-      result.push({
-        'title': title,
-        'author': author,
-        'url': url,
-        'type': type,
-        'lastChapter': lastChapter
-      });
-    })
+    const { url, type, cate } = req.body
+    let result = []
+    if (type == '笔趣阁') {
+      result = await utils.getFisrtPageBook(url, cate)
+    } else {
+      result = await utils.getBookByType(url, type, cate)
+    }
     // console.log(result);
-
     for (let resData of result) {
       await book.create(resData)
     }
-
-    res.send(result);
+    res.send(result)
   })
 
   //获取章节内容
