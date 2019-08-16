@@ -17,30 +17,11 @@ module.exports = app => {
   //获取小说分类
   router.post('/category', async (req, res) => {
     const { url } = req.body
-    let htmlText = await spider.fetchByUrl(url)
-    const $ = cheerio.load(htmlText)
-
-    const li_list = $('li', '.nav')
-    let result = []
-    li_list.each(function (index, element) {
-      const el = $(element)
-      result.push({
-        'name': el.text().replace(/小说/i, ''),
-        'url': url + el.children('a').attr('href'),
-        'bookCount': 0
-      })
-    })
-
+    let result =await utils.getChapter(url)
     for (let resData of result) {
       await category.create(resData)
     }
-
     res.send(result)
-  })
-
-  //从数据库中获取分类信息
-  router.get('/category', async (req, res) => {
-
   })
 
   //获取书籍
@@ -61,40 +42,22 @@ module.exports = app => {
 
   //获取章节内容
   router.post('/chapter', async (req, res) => {
-    const { url } = req.body
-    let htmlText = await spider.fetchByUrl(url)
-    const $ = cheerio.load(htmlText)
+    const { url, bookId } = req.body
+    const chapters =await utils.getChapterContent(url,bookId)
 
-    const dt_list = $('dl', '#list').eq(0).children()
-    let dt = false
-    let result = []
-    let order = 1
-    dt_list.each(async function (index, element) {
-      const el = $(element)
-      if (el.text() == '正文') {
-        dt = true
-      }
-      if (dt) {
-        let href = el.children('a').attr('href')
-        let htmlContent = await spider.fetchByUrl(url + href.split('\/')[2])
-        const ch = cheerio.load(htmlContent, { decodeEntities: false })
-        await chapter.create({
-          'name': el.text(),
-          'book': '5d440b66e999ed40cc7b04f1',
-          'url': href.split('\/')[2],
-          'order': order,
-          'content': ch('#content').html(),
-        })
-        result.push({
-          'name': el.text(),
-          'book': '5d440b66e999ed40cc7b04f1',
-          'url': href.split('\/')[2],
-          'order': order,
-          'content': ch('#content').html(),
-        })
-        order++
-      }
-    })
+    // let bookInfo = chapters.bookInfo
+    // await book.findByIdAndUpdate(bookId, bookInfo)
+
+    let cats=category.find({book:mongoose.Types.ObjectId(bookId)})
+    console.log(cats)
+    cats.deleteMany()
+    let result = chapters.result
+    // result.forEach(async function (value,index) {
+    //   let htmlContent = await spider.fetchByUrl(value.url)
+    //   let ch = cheerio.load(htmlContent, { decodeEntities: false })
+    //   value.content=ch("#content").html()
+    //   await chapter.create(value)
+    // })
     res.send(result)
   })
 

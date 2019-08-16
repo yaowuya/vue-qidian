@@ -8,7 +8,7 @@ import {getToken} from "./utils/auth"
 const env = require('../config/' + (process.env.NODE_ENV || 'dev') + '.env')
 const http = axios.create({
   baseURL: env.BASE_API || "/admin/api",
-  timeout: 5000
+  timeout: 60000
 })
 
 http.interceptors.request.use(function (config) {

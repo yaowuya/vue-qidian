@@ -19,7 +19,7 @@
         <el-button type="primary" @click="addChapterSpider">同步章节</el-button>
       </el-col>
       <el-col :span="3">
-        <el-button type="primary" @click="searchCategory">查询分类</el-button>
+        <el-button type="primary" @click="searchBooks">查询书籍</el-button>
       </el-col>
     </el-row>
   </section>
@@ -46,6 +46,7 @@
         console.log(create)
       },
       async addBookSpider () {
+        let del=await this.$http.delete("/rest/books/")
         let category = await this.$http.get('/rest/categories')
         for (let cate of category) {
           let create = await this.$http.post('/spider/book',
@@ -58,14 +59,15 @@
         }
       },
       async addChapterSpider () {
-        let create = await this.$http.post('/spider/chapter', { url: 'http://www.biquge.ink/11986_01986/' })
+        let create = await this.$http.post('/spider/chapter', {
+          url: 'http://www.biquge.ink/11789_01789/',
+          bookId: '5d567464abdf6e604cc2e4a3'
+        })
         console.log(create)
       },
-      async searchCategory () {
-        let category = await this.$http.get('/rest/categories')
-        for (let cate of category) {
-          console.log(cate)
-        }
+      async searchBooks () {
+        let books = await this.$http.get('/rest/books')
+        console.log(books)
       }
     }
   }

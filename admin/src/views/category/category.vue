@@ -3,27 +3,13 @@
     <el-row class="mt-10 px-10">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="分类名称">
-          <el-select v-model="formInline.name" placeholder="请选择父级分类">
-            <el-option label="全部" value=""></el-option>
-            <el-option
-              v-for="p in parents"
-              :key="p._id"
-              :label="p.name"
-              :value="p.name">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="分类级别">
-          <el-select v-model="formInline.level" placeholder="分类级别">
-            <el-option label="全部" value=""></el-option>
-            <el-option label="普通分类" value="普通分类"></el-option>
-            <el-option label="一级分类" value="一级分类"></el-option>
-            <el-option label="二级分类" value="二级分类"></el-option>
-            <el-option label="三级分类" value="三级分类"></el-option>
-          </el-select>
+          <el-input v-model="formInline.name" placeholder="分类名称"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="queryCategory">查询</el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="info" @click="addCategory">添加</el-button>
         </el-form-item>
       </el-form>
     </el-row>
@@ -48,24 +34,18 @@
           min-width="240">
         </el-table-column>
         <el-table-column
-          prop="level"
-          sortable=""
-          label="分类级别"
-          min-width="120">
-        </el-table-column>
-        <el-table-column
           prop="name"
           label="分类名称"
           min-width="120">
         </el-table-column>
         <el-table-column
-          prop="parent.name"
-          label="父级分类"
+          prop="bookCount"
+          label="数目"
           min-width="120">
         </el-table-column>
         <el-table-column
-          prop="bookCount"
-          label="数目"
+          prop="url"
+          label="分类链接"
           min-width="120">
         </el-table-column>
         <el-table-column
@@ -111,18 +91,11 @@
         <el-form-item label="分类名称" prop="name">
           <el-input v-model="dialogForm.name"></el-input>
         </el-form-item>
-        <el-form-item label="父级分类" prop="parent">
-          <el-select v-model="dialogForm.parent._id" placeholder="请选择父级分类" class="w-100">
-            <el-option
-              v-for="p in parents"
-              :key="p._id"
-              :label="p.name"
-              :value="p._id">
-            </el-option>
-          </el-select>
-        </el-form-item>
         <el-form-item label="数目" prop="bookCount">
           <el-input v-model="dialogForm.bookCount"></el-input>
+        </el-form-item>
+        <el-form-item label="链接" prop="bookCount">
+          <el-input v-model="dialogForm.url"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -136,12 +109,12 @@
 <script>
   export default {
     name: 'categoryList',
-    data() {
+    data () {
       return {
         formInline: {
-          name: "",
-          level: "",
-          parent: ""
+          name: '',
+          level: '',
+          parent: ''
         },
         tableData: [],
         multipleSelection: [],
@@ -149,23 +122,20 @@
           update: '编辑',
           create: '添加'
         },
-        dialogStatus: "create",
+        dialogStatus: 'create',
         dialogVisible: false,
         dialogForm: {
-          _id: "",
-          name: "",
-          parent: [],
-          bookCount: 0
+          name: '',
+          bookCount: 0,
+          url:""
         },
+        dialogId:null,
         rules: {
           name: [
-            {required: true, message: '请输入分类名称', trigger: 'blur'},
-          ],
-          parent: [
-            {required: true, message: '请选择父分类', trigger: 'change'}
+            { required: true, message: '请输入分类名称', trigger: 'blur' },
           ],
           bookCount: [
-            {required: true, message: '请输入数目', trigger: 'blur'},
+            { required: true, message: '请输入数目', trigger: 'blur' },
           ]
         },
         parents: [],
@@ -176,69 +146,107 @@
         total: 0
       }
     },
-    created() {
-      this.fetchData();
-      this.onSearch();
+    created () {
+      this.fetchData()
+      this.onSearch()
     },
     methods: {
-      async fetchData() {
-        const res = await this.$http.get("/rest/categories");
-        this.parents = res;
+      async fetchData () {
+        const res = await this.$http.get('/rest/categories')
+        this.parents = res
       },
-      handleEdit(index, row) {
-        this.dialogVisible = true;
-        this.dialogForm = Object.assign({}, row);
-        this.dialogForm.parent==null?this.dialogForm.parent={_id:""}:this.dialogForm.parent;
-        console.log(this.dialogForm, row);
+      handleEdit (index, row) {
+        this.dialogVisible = true
+        this.dialogStatus = 'update'
+        this.dialogId=row._id
+        this.dialogForm = Object.assign({}, row)
+        console.log(this.dialogForm, row)
         this.$nextTick(() => {
-          this.$refs['ruleForm'].clearValidate();
-        });
+          this.$refs['ruleForm'].clearValidate()
+        })
       },
-      handleDelete(index, row) {
-        console.log(index, row);
+      handleDelete (index, row) {
+        this.$confirm(`是否确定要删除分类 "${row.name}"`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(async () => {
+          const res = await this.$http.delete(`/rest/categories/${row._id}`)
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+          this.onSearch()
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
       },
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
+      handleSelectionChange (val) {
+        this.multipleSelection = val
       },
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-        this.pageSize=val;
-        this.onSearch();
+      handleSizeChange (val) {
+        console.log(`每页 ${val} 条`)
+        this.pageSize = val
+        this.onSearch()
       },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-        this.pageNum=val;
-        this.onSearch();
+      handleCurrentChange (val) {
+        console.log(`当前页: ${val}`)
+        this.pageNum = val
+        this.onSearch()
 
       },
-      queryCategory(){
-        this.pageNum=1;
-        this.onSearch();
+      queryCategory () {
+        this.pageNum = 1
+        this.onSearch()
       },
-      async onSearch() {
-        const res=await this.$http.post("/book/categories/pagination",{
-          pageNum:this.pageNum,
-          pageSize:this.pageSize,
-          level:this.formInline.level,
-          name:this.formInline.name
-        });
-        this.tableData = res.data;
-        this.total=res.count;
-        console.log("onSearch",res);
+      addCategory () {
+        this.dialogVisible = true
+        this.dialogStatus = 'create'
+        this.dialogId=null
+        this.$nextTick(() => {
+          this.$refs['ruleForm'].clearValidate()
+        })
       },
-      submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
+      async onSearch () {
+        const res = await this.$http.post('/book/categories/pagination', {
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          name: this.formInline.name
+        })
+        this.tableData = res.data
+        this.total = res.count
+        console.log('onSearch', res)
+      },
+      submitForm (formName) {
+        this.$refs[formName].validate(async (valid) => {
           if (valid) {
-            alert('submit!');
+            let res = null
+            if (this.dialogId) {
+              res = await this.$http.put(`/rest/categories/${this.dialogId}`, this.dialogForm)
+            } else {
+              res = await this.$http.post('/rest/categories', this.dialogForm)
+            }
+            console.log(res)
           } else {
-            console.log('error submit!!');
-            return false;
+            this.$message({
+              type: 'error',
+              message: '请输入完整信息'
+            })
+            return false
           }
-          this.dialogVisible = false;
-        });
+          this.$message({
+            type: 'success',
+            message: '保存成功'
+          })
+          this.dialogVisible = false
+          this.onSearch()
+        })
       },
-      resetForm(formName) {
-        this.dialogVisible = false;
+      resetForm (formName) {
+        this.dialogVisible = false
       }
     }
   }
