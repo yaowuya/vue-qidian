@@ -61,12 +61,12 @@
       async addChapterSpider () {
         let create = await this.$http.post('/spider/chapter', {
           url: 'http://www.biquge.ink/11789_01789/',
-          bookId: '5d567464abdf6e604cc2e4a3'
+          bookId: '5d56c69832372923f02471dc'
         })
         console.log(create)
       },
       async searchBooks () {
-        let books = await this.$http.get('/rest/books')
+        let books = await this.$http.get('/rest/book')
         console.log(books)
       }
     }

@@ -45,19 +45,18 @@ module.exports = app => {
     const { url, bookId } = req.body
     const chapters =await utils.getChapterContent(url,bookId)
 
-    // let bookInfo = chapters.bookInfo
-    // await book.findByIdAndUpdate(bookId, bookInfo)
+    let bookInfo = chapters.bookInfo
+    await book.findByIdAndUpdate(bookId, bookInfo)
 
-    let cats=category.find({book:mongoose.Types.ObjectId(bookId)})
-    console.log(cats)
-    cats.deleteMany()
+    let chapts=await chapter.deleteMany({book:mongoose.Types.ObjectId(bookId)})
+
     let result = chapters.result
-    // result.forEach(async function (value,index) {
-    //   let htmlContent = await spider.fetchByUrl(value.url)
-    //   let ch = cheerio.load(htmlContent, { decodeEntities: false })
-    //   value.content=ch("#content").html()
-    //   await chapter.create(value)
-    // })
+    result.forEach(async function (value,index) {
+      let htmlContent = await spider.fetchByUrl(value.url)
+      let ch = cheerio.load(htmlContent, { decodeEntities: false })
+      value.content=ch("#content").html()
+      await chapter.create(value)
+    })
     res.send(result)
   })
 
