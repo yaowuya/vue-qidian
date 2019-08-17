@@ -16,10 +16,13 @@
         <el-button type="primary" @click="addBookSpider">同步书籍</el-button>
       </el-col>
       <el-col :span="3">
-        <el-button type="primary" @click="addChapterSpider">同步章节</el-button>
+        <el-button type="primary" @click="addChapterSpider">同步章节测试</el-button>
       </el-col>
       <el-col :span="3">
         <el-button type="primary" @click="searchBooks">查询书籍</el-button>
+      </el-col>
+      <el-col :span="3">
+        <el-button type="primary" @click="addChapter">同步章节内容</el-button>
       </el-col>
     </el-row>
   </section>
@@ -46,7 +49,7 @@
         console.log(create)
       },
       async addBookSpider () {
-        let del=await this.$http.delete("/rest/books/")
+        let del = await this.$http.delete('/rest/books/')
         let category = await this.$http.get('/rest/categories')
         for (let cate of category) {
           let create = await this.$http.post('/spider/book',
@@ -67,7 +70,24 @@
       },
       async searchBooks () {
         let books = await this.$http.get('/rest/book')
-        console.log(books)
+        for (let book of books) {
+          console.log(book.url, book._id)
+        }
+      },
+      async addChapter () {
+        let books = await this.$http.get('/rest/book')
+        for (let book of books) {
+          this.chapterByTime(book)
+        }
+      },
+      chapterByTime (book) {
+        setTimeout(async () => {
+          let create = await this.$http.post('/spider/chapter', {
+            url: book.url,
+            bookId: book._id
+          })
+          console.log(create)
+        }, 1000)
       }
     }
   }
