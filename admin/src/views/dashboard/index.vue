@@ -24,6 +24,9 @@
       <el-col :span="3">
         <el-button type="primary" @click="addChapter">同步章节内容</el-button>
       </el-col>
+      <el-col :span="3">
+        <el-button type="primary" @click="chapterTest">章节测试</el-button>
+      </el-col>
     </el-row>
   </section>
 </template>
@@ -62,17 +65,23 @@
         }
       },
       async addChapterSpider () {
-        let create = await this.$http.post('/spider/chapter', {
-          url: 'http://www.biquge.ink/11789_01789/',
-          bookId: '5d56c69832372923f02471dc'
+        let create = await this.$http.post('/spider/testChapter', {
+          url: 'http://www.biquge.ink/22081_02081/',
+          bookId: '5d567461abdf6e604cc2e46d'
         })
         console.log(create)
       },
       async searchBooks () {
-        let books = await this.$http.get('/rest/book')
-        for (let book of books) {
-          console.log(book.url, book._id)
-        }
+        let books = this.$http.get('/rest/book')
+        books.then(data => {
+          console.log(data)
+        }).catch(err => {
+          console.log(err)
+        })
+
+        // for (let book of books) {
+        //   console.log(book.url, book._id)
+        // }
       },
       async addChapter () {
         let books = await this.$http.get('/rest/book')
@@ -82,12 +91,13 @@
       },
       chapterByTime (book) {
         setTimeout(async () => {
-          let create = await this.$http.post('/spider/chapter', {
-            url: book.url,
-            bookId: book._id
-          })
+          let create = await this.$http.post('/spider/chapter')
           console.log(create)
         }, 1000)
+      },
+      async chapterTest(){
+        let chapters=await this.$http.post('/spider/chapter/content')
+        console.log(chapters)
       }
     }
   }

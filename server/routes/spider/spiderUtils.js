@@ -1,8 +1,10 @@
 const spider = require('../../utils/loadHtml')
 const cheerio = require('cheerio')
-
+const mongoose = require('mongoose')
+const book = mongoose.model('Book')
+const chapter = mongoose.model('Chapter')
 //获取书籍分类
-const getChapter=async (url)=>{
+const getCategory = async (url) => {
   let htmlText = await spider.fetchByUrl(url)
   const $ = cheerio.load(htmlText)
 
@@ -57,7 +59,7 @@ const getBookByType = async (url, type, cate) => {
   li_list.each(function (index, element) {
     const el = $(element)
     let url = el.find('.s2').children('a').attr('href')
-    let title = el.find('.s2').text().replace(/《/,"").replace(/》/,"")
+    let title = el.find('.s2').text().replace(/《/, '').replace(/》/, '')
     let lastChapter = el.find('.s3 a').text()
     let author = el.find('.s5').text()
     result.push({
@@ -83,16 +85,16 @@ const getBookByType = async (url, type, cate) => {
 }
 
 //获取章节信息
-const getChapterContent=async (url,bookId)=>{
+const getChapterDetail = async (url, bookId) => {
   let htmlText = await spider.fetchByUrl(url)
   const $ = cheerio.load(htmlText)
 
-  const cover=$("img","#fmimg")
-  const maininfo=$("#maininfo")
-  let bookInfo={
-    cover:cover.attr("src"),
-    intro:maininfo.find("#intro p").text(),
-    updated:maininfo.find("#info p").eq(2).text().replace(/最后更新：/i,"")
+  const cover = $('img', '#fmimg')
+  const maininfo = $('#maininfo')
+  let bookInfo = {
+    cover: cover.attr('src'),
+    intro: maininfo.find('#intro p').text(),
+    updated: maininfo.find('#info p').eq(2).text().replace(/最后更新：/i, '')
   }
 
   const dt_list = $('dl', '#list').eq(0).children()
@@ -107,15 +109,15 @@ const getChapterContent=async (url,bookId)=>{
     }
     if (dt) {
       let href = el.children('a').attr('href')
-      if(href!=undefined){
-        let hrefUrl=href.split('\/')[2]
-        if(hrefUrl.indexOf("html")>-1){
+      if (href != undefined) {
+        let hrefUrl = href.split('\/')[2]
+        if (hrefUrl.indexOf('html') > -1) {
           result.push({
             'name': el.text(),
             'book': bookId,
-            'url':url+ hrefUrl,
+            'url': url + hrefUrl,
             'order': order,
-            'content':""
+            'content': ''
           })
           order++
         }
@@ -123,14 +125,37 @@ const getChapterContent=async (url,bookId)=>{
     }
   })
   return {
-    bookInfo:bookInfo,
-    result:result
+    bookInfo: bookInfo,
+    result: result
   }
 }
 
+const getChapter = function (bookItem, callback) {
+  const url = bookItem.url
+  const bookId = bookItem._id
+  let cha = getChapterDetail(url, bookId)
+  cha.then(data => {
+    let bookInfo = data.bookInfo
+    book.findByIdAndUpdate(bookId, bookInfo).then(res=>{},err=>{console.log(err)})
+    chapter.deleteMany({ book: mongoose.Types.ObjectId(bookId) }).then(res=>{},err=>{console.log(err)})
+
+    let result = data.result
+    for (let resData of result) {
+      chapter.create(resData)
+    }
+    let delay = parseInt((Math.random() * 10000000) % 2000, 10)
+    setTimeout(function () {
+      callback(null, result)
+    }, delay)
+  }).catch(err => {
+    console.log(err)
+  })
+}
+
 module.exports = {
-  getChapter:getChapter,
+  getCategory: getCategory,
   getFisrtPageBook: getFisrtPageBook,
   getBookByType: getBookByType,
-  getChapterContent:getChapterContent
+  getChapterDetail: getChapterDetail,
+  getChapter: getChapter
 }

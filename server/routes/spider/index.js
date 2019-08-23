@@ -4,9 +4,8 @@ module.exports = app => {
     mergeParams: true
   })
 
-  const spider = require('../../utils/loadHtml')
-  const cheerio = require('cheerio')
   const utils = require('./spiderUtils')
+  const nodeAsync = require('async')
 
   //第二种获取model方法
   const mongoose = require('mongoose')
@@ -17,7 +16,7 @@ module.exports = app => {
   //获取小说分类
   router.post('/category', async (req, res) => {
     const { url } = req.body
-    let result =await utils.getChapter(url)
+    let result = await utils.getCategory(url)
     for (let resData of result) {
       await category.create(resData)
     }
@@ -40,26 +39,33 @@ module.exports = app => {
     res.send(result)
   })
 
-  //获取章节内容
-  router.post('/chapter', async (req, res) => {
+  router.post('/testChapter', async (req, res) => {
     const { url, bookId } = req.body
-    const chapters =await utils.getChapterContent(url,bookId)
-
-    let bookInfo = chapters.bookInfo
-    await book.findByIdAndUpdate(bookId, bookInfo)
-
-    let chapts=await chapter.deleteMany({book:mongoose.Types.ObjectId(bookId)})
-
-    let result = chapters.result
-    result.forEach(async function (value,index) {
-      let htmlContent = await spider.fetchByUrl(value.url)
-      let ch = cheerio.load(htmlContent, { decodeEntities: false })
-      value.content=ch("#content").html()
-      await chapter.create(value)
-    })
-    res.send(result)
+    chapter.deleteMany({ book: mongoose.Types.ObjectId(bookId) }).then(res => {}, err => {console.log(err)})
+    res.send('result')
   })
 
+  //获取章节信息
+  router.post('/chapter', async (req, res) => {
+    const books = await book.find().skip(2000)
+    nodeAsync.mapLimit(books, 10, function (book, callback) {
+      utils.getChapter(book, callback)
+    }, function (err, result) {
+      console.log('final')
+      console.log(result)
+    })
+
+    // let htmlContent = await spider.fetchByUrl(value.url)
+    // let ch = cheerio.load(htmlContent, { decodeEntities: false })
+    // value.content=ch("#content").html()
+    res.send(books)
+  })
+
+  // 获取章节内容
+  router.post('/chapter/content', async (req, res) => {
+    const chapters=await chapter.find()
+    res.send(chapters)
+  })
   app.use('/admin/api/spider', router)
   // 错误处理函数
   app.use(async (err, req, res, next) => {
