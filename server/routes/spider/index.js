@@ -13,6 +13,9 @@ module.exports = app => {
   const chapter = mongoose.model('Chapter')
   const category = mongoose.model('Category')
 
+  const schedule=require("./schedule")
+  schedule.scheduleCronstyle()
+
   //获取小说分类
   router.post('/category', async (req, res) => {
     const { url } = req.body
@@ -40,14 +43,16 @@ module.exports = app => {
   })
 
   router.post('/testChapter', async (req, res) => {
-    const { url, bookId } = req.body
-    chapter.deleteMany({ book: mongoose.Types.ObjectId(bookId) }).then(res => {}, err => {console.log(err)})
-    res.send('result')
+    // const { url, bookId } = req.body
+    // chapter.deleteMany({ book: mongoose.Types.ObjectId(bookId) }).then(res => {}, err => {console.log(err)})
+    // chapter.updateOne({ _id: "5d5fa671758ceab414261863", content: '' },{ content: "content" }).exec()
+    let chap =await chapter.where({ _id:"5d5fa671758ceab414261863" })
+    res.send(chap)
   })
 
   //获取章节信息
   router.post('/chapter', async (req, res) => {
-    const books = await book.find().skip(2000)
+    const books = await book.find()
     nodeAsync.mapLimit(books, 10, function (book, callback) {
       utils.getChapter(book, callback)
     }, function (err, result) {
@@ -55,17 +60,15 @@ module.exports = app => {
       console.log(result)
     })
 
-    // let htmlContent = await spider.fetchByUrl(value.url)
-    // let ch = cheerio.load(htmlContent, { decodeEntities: false })
-    // value.content=ch("#content").html()
     res.send(books)
   })
 
   // 获取章节内容
   router.post('/chapter/content', async (req, res) => {
-    const chapters=await chapter.find()
-    res.send(chapters)
+    let content=utils.updateChapterContent()
+    res.send("content")
   })
+
   app.use('/admin/api/spider', router)
   // 错误处理函数
   app.use(async (err, req, res, next) => {

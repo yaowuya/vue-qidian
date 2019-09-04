@@ -22,10 +22,10 @@
         <el-button type="primary" @click="searchBooks">查询书籍</el-button>
       </el-col>
       <el-col :span="3">
-        <el-button type="primary" @click="addChapter">同步章节内容</el-button>
+        <el-button type="primary" @click="addChapter">同步章节信息</el-button>
       </el-col>
       <el-col :span="3">
-        <el-button type="primary" @click="chapterTest">章节测试</el-button>
+        <el-button type="primary" @click="chapterContent">更新章节内容</el-button>
       </el-col>
     </el-row>
   </section>
@@ -72,16 +72,9 @@
         console.log(create)
       },
       async searchBooks () {
-        let books = this.$http.get('/rest/book')
-        books.then(data => {
-          console.log(data)
-        }).catch(err => {
-          console.log(err)
-        })
-
-        // for (let book of books) {
-        //   console.log(book.url, book._id)
-        // }
+        // let books =await this.$http.get('/rest/book')
+        let chapter = await this.$http.post('/spider/testChapter')
+        console.log(chapter)
       },
       async addChapter () {
         let books = await this.$http.get('/rest/book')
@@ -95,8 +88,8 @@
           console.log(create)
         }, 1000)
       },
-      async chapterTest(){
-        let chapters=await this.$http.post('/spider/chapter/content')
+      async chapterContent () {
+        let chapters = await this.$http.post('/spider/chapter/content')
         console.log(chapters)
       }
     }

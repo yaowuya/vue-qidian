@@ -3,6 +3,9 @@ const cheerio = require('cheerio')
 const mongoose = require('mongoose')
 const book = mongoose.model('Book')
 const chapter = mongoose.model('Chapter')
+const nodeAsync = require('async')
+
+const utils = require('../../utils/utils')
 //获取书籍分类
 const getCategory = async (url) => {
   let htmlText = await spider.fetchByUrl(url)
@@ -136,8 +139,8 @@ const getChapter = function (bookItem, callback) {
   let cha = getChapterDetail(url, bookId)
   cha.then(data => {
     let bookInfo = data.bookInfo
-    book.findByIdAndUpdate(bookId, bookInfo).then(res=>{},err=>{console.log(err)})
-    chapter.deleteMany({ book: mongoose.Types.ObjectId(bookId) }).then(res=>{},err=>{console.log(err)})
+    book.findByIdAndUpdate(bookId, bookInfo).then(res => {}, err => {console.log(err)})
+    chapter.deleteMany({ book: mongoose.Types.ObjectId(bookId) }).then(res => {}, err => {console.log(err)})
 
     let result = data.result
     for (let resData of result) {
@@ -152,10 +155,55 @@ const getChapter = function (bookItem, callback) {
   })
 }
 
+const updateChapterContent = function () {
+  let chapters = chapter.find({ content: '' }).limit(1000)
+  chapters.then(data => {
+    console.log(data.length, utils.formatTime('Y-M-D h:m:s'))
+    if (data.length > 0) {
+      nodeAsync.mapLimit(data, 30, function (chapter, callback) {
+        getChapterContent(chapter.url, chapter._id, callback)
+      }, function (err, result) {
+        console.log('final', utils.formatTime('Y-M-D h:m:s'))
+        console.log(result)
+        // updateChapterContent()
+        return '完成'
+      })
+    } else {
+      return '完成'
+    }
+  }).catch(err => {
+    console.log(err)
+  })
+
+}
+
+const getChapterContent = function (url, id, callback) {
+  chapter.where({ _id: id, content: '' }).then(res => {
+    if (res.length > 0) {
+      let htmlContent = spider.fetchByUrl(url)
+      htmlContent.then(data => {
+        let ch = cheerio.load(data, { decodeEntities: false })
+        let content = ch('#content').html()
+        chapter.updateOne({ _id: id, content: '' }, { content: content }).exec()
+        console.log(id)
+        callback(null, '成功')
+      }).catch(err => {
+        console.log(err)
+        callback(null, '失败')
+      })
+    } else {
+      callback(null, '成功')
+    }
+  }).catch(err => {
+    console.log(err)
+    callback(null, '失败')
+  })
+}
 module.exports = {
   getCategory: getCategory,
   getFisrtPageBook: getFisrtPageBook,
   getBookByType: getBookByType,
   getChapterDetail: getChapterDetail,
-  getChapter: getChapter
+  getChapter: getChapter,
+  updateChapterContent: updateChapterContent
 }

@@ -70,6 +70,17 @@ export const constantRoutes = [
         meta: { title: '分类列表',icon:"example" }
       }
     ]
+  },{
+    path: '/chapter',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        name: 'chapter',
+        component: () => import('@/views/chapter/chapter'),
+        meta: { title: '章节',icon:"example" }
+      }
+    ]
   },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
