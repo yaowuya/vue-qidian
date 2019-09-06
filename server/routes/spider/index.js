@@ -13,8 +13,12 @@ module.exports = app => {
   const chapter = mongoose.model('Chapter')
   const category = mongoose.model('Category')
 
-  const schedule=require("./schedule")
-  schedule.scheduleCronstyle()
+  const schedule = require('./schedule')
+  // schedule.scheduleCronstyle()
+  schedule.proxySchedule()
+
+  const ipProxy = require('../../utils/proxyIp')
+  ipProxy.getIp()
 
   //获取小说分类
   router.post('/category', async (req, res) => {
@@ -46,7 +50,7 @@ module.exports = app => {
     // const { url, bookId } = req.body
     // chapter.deleteMany({ book: mongoose.Types.ObjectId(bookId) }).then(res => {}, err => {console.log(err)})
     // chapter.updateOne({ _id: "5d5fa671758ceab414261863", content: '' },{ content: "content" }).exec()
-    let chap =await chapter.where({ _id:"5d5fa671758ceab414261863" })
+    let chap = await chapter.where({ _id: '5d5fa671758ceab414261863' })
     res.send(chap)
   })
 
@@ -65,8 +69,8 @@ module.exports = app => {
 
   // 获取章节内容
   router.post('/chapter/content', async (req, res) => {
-    let content=utils.updateChapterContent()
-    res.send("content")
+    let content = utils.updateChapterContent()
+    res.send('content')
   })
 
   app.use('/admin/api/spider', router)

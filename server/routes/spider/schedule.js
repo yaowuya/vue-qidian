@@ -1,10 +1,7 @@
 const schedule = require('node-schedule')
 const spiderUtils = require('./spiderUtils')
 const utils = require('../../utils/utils')
-const mongoose = require('mongoose')
-
-const chapter = mongoose.model('Chapter')
-let chapterId = ''
+const ipProxy = require('../../utils/proxyIp')
 
 const scheduleCronstyle = () => {
   //在每小时的30分运行定时任务
@@ -18,7 +15,7 @@ const scheduleCronstyle = () => {
   // rule.minute = 30
 //通过数组在多个时刻运行
   rule.minute = []
-  for (let i = 0; i < 60; i=i+4) {
+  for (let i = 0; i < 60; i = i + 4) {
     rule.minute.push(i)
   }
   // rule.minute = [1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]
@@ -30,7 +27,19 @@ const scheduleCronstyle = () => {
   })
 }
 
+const proxySchedule = function () {
+  let rule = new schedule.RecurrenceRule()
+  rule.second = []
+  for (let i = 0; i < 60; i+=15) {
+    rule.second.push(i)
+  }
+  schedule.scheduleJob(rule, () => {
+    ipProxy.getIp()
+    console.log('--------------------schedule------------------------' + utils.formatTime('Y-M-D h:m:s'))
+  })
+}
 module.exports = {
-  scheduleCronstyle: scheduleCronstyle
+  scheduleCronstyle: scheduleCronstyle,
+  proxySchedule:proxySchedule
 }
 
