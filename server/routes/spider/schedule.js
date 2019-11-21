@@ -29,9 +29,9 @@ const scheduleCronstyle = () => {
 
 const proxySchedule = function () {
   let rule = new schedule.RecurrenceRule()
-  rule.second = []
-  for (let i = 0; i < 60; i+=15) {
-    rule.second.push(i)
+  rule.minute = []
+  for (let i = 0; i < 60; i += 10) {
+    rule.minute.push(i)
   }
   schedule.scheduleJob(rule, () => {
     ipProxy.getIp()
@@ -40,6 +40,6 @@ const proxySchedule = function () {
 }
 module.exports = {
   scheduleCronstyle: scheduleCronstyle,
-  proxySchedule:proxySchedule
+  proxySchedule: proxySchedule
 }
 

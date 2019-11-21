@@ -34,7 +34,6 @@ const getIp = async function () {
   nodeAsync.mapLimit(ipList, 20, function (ip, callback) {
     testSpeed(ip, callback)
   }, function (err, result) {
-    client.del('ips')
     let ipArray=[]
     for (let res of result) {
       if (res != '') {
