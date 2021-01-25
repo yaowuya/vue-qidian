@@ -12,7 +12,7 @@ app.use('/uploads', express.static(__dirname + '/uploads'))
 require('./database/db')(app)
 require('./routes/admin')(app)
 // require("./routes/web")(app)
-require('./routes/spider')(app)
+// require('./routes/spider')(app)
 
 app.listen(3000, () => {
   console.log('http://localhost:3000')
