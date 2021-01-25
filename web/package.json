@@ -31,7 +31,7 @@
     "connect": "^3.7.0",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.2.2",
-    "node-sass": "^4.9.0",
+    "node-sass": "^4.13.1",
     "postcss-pxtorem": "^4.0.1",
     "runjs": "^4.4.2",
     "sass-loader": "^7.1.0",
