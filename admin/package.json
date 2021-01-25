@@ -10,7 +10,7 @@
     "prod": "cross-env NODE_ENV=prod npx webpack --config webpack.prod.js"
   },
   "dependencies": {
-    "axios": "0.18.0",
+    "axios": "0.21.1",
     "babel-runtime": "^6.26.0",
     "core-js": "^2.6.5",
     "element-ui": "2.7.2",
